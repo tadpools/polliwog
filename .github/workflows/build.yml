@@ -1,0 +1,32 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / ${{ matrix.backend }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-24.04, macos-15]
+        backend: [zlib-only, all-backends]
+    steps:
+      - uses: actions/checkout@v4
+
+      # zlib-only is the default option set; all-backends turns on
+      # every backend option. until h1 none of them fetch anything,
+      # but the matrix shape is the spawn contract (dev/roadmap.md).
+      - name: configure
+        run: >
+          cmake --preset default
+          ${{ matrix.backend == 'all-backends' && '-DPOLLIWOG_WITH_ZSTD=ON -DPOLLIWOG_WITH_LZ4=ON -DPOLLIWOG_WITH_ZLIB_NG=ON' || '' }}
+
+      - name: build
+        run: cmake --build --preset default
+
+      - name: test
+        run: ctest --preset default
