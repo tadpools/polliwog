@@ -22,6 +22,10 @@ described here before it has a test.
   c++23, the option set from dev/architecture.md, default and debug
   presets, and the clang-format/clang-tidy configs; configured and
   built warning-free locally on msvc 19.51 (cmake 4.4.2)
+- ci: the build matrix (windows-latest, ubuntu-24.04, macos-15 x
+  zlib-only/all-backends), the clang-format check, and catch2
+  v3.16.0 with a smoke test that verifies the c++23 floor and
+  reports the compiler
 - the founding decisions, recorded in dev/decisions.md with their
   costs and change conditions
 
