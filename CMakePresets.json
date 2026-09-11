@@ -21,18 +21,20 @@
     }
   ],
   "buildPresets": [
-    { "name": "default", "configurePreset": "default" },
-    { "name": "debug", "configurePreset": "debug" }
+    { "name": "default", "configurePreset": "default", "configuration": "Debug" },
+    { "name": "debug", "configurePreset": "debug", "configuration": "Debug" }
   ],
   "testPresets": [
     {
       "name": "default",
       "configurePreset": "default",
+      "configuration": "Debug",
       "output": { "outputOnFailure": true }
     },
     {
       "name": "debug",
       "configurePreset": "debug",
+      "configuration": "Debug",
       "output": { "outputOnFailure": true }
     }
   ]
