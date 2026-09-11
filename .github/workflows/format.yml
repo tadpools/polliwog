@@ -1,0 +1,23 @@
+name: format
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  clang-format:
+    name: clang-format check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      # the floor is 17 (dev/versions.md); the runner's apt pool
+      # carries 18, pinned here per the ci-pins rule in the same file
+      - name: install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format-18
+
+      - name: check
+        run: >
+          git ls-files -z -- '*.hpp' '*.h' '*.cpp' '*.cc' '*.ipp'
+          | xargs -0 -r clang-format-18 --dry-run -Werror --style=file
