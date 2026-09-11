@@ -24,8 +24,7 @@ add_library(polliwog::polliwog ALIAS polliwog)
 target_compile_features(polliwog INTERFACE cxx_std_23)
 
 # the warning gate applies to our code only; consumers never inherit
-# it. every target of ours calls this once (no code compiles yet, so
-# nothing calls it until the first public header lands at s4).
+# it. every target of ours calls this once.
 function(polliwog_target_warnings tgt)
   if(POLLIWOG_WARNINGS)
     if(MSVC)
@@ -35,3 +34,6 @@ function(polliwog_target_warnings tgt)
     endif()
   endif()
 endfunction()
+
+enable_testing()
+add_subdirectory(test)
