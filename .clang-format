@@ -1,0 +1,4 @@
+# layout is clang-format's job, always wins (dev/style.md). llvm base,
+# no overrides until a header gives a reason; any change lands with a
+# decision record.
+BasedOnStyle: LLVM
