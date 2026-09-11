@@ -45,6 +45,17 @@ history reads conventional.
 done-when: an empty library configures and builds warning-free
 locally, with the toolchain version recorded in the sitting note.
 
+sitting note (2026-09-11, closed): done. toolchain verified before
+writing: cmake 4.4.2, ninja 1.13, visual studio community 2026
+18.9.0, msvc 19.51.36256.0, windows sdk 10.0.26100.0; gcc 16.1.0
+(mingw-w64 ucrt) present as backup. default and debug presets both
+configured and built clean under msbuild 18.9.1 - zero warnings,
+honestly trivial while the target compiles nothing; the gate is
+wired as a helper with no caller until s4. clang-format and
+clang-tidy are not installed on this machine - their check is a ci
+concern at s3, recorded here rather than skipped silently. pr #9,
+issue #8.
+
 ### sitting s3 - ci truth
 
 - .github/workflows/build.yml: the 3-runner matrix
