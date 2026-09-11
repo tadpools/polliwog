@@ -1,0 +1,9 @@
+# line endings: the repository and every checkout use LF, whatever the
+# platform's git config says. binary paths are marked so a future
+# corpus ingestion can never be mangled by conversion.
+* text=auto eol=lf
+
+# corpora and fuzz artifacts are data, not text
+test/pond/corpus/** binary
+fuzz/corpus/** binary
+fuzz/artifacts/** binary
