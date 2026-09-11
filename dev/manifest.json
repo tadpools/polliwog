@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "project": {
+    "name": "polliwog",
+    "kind": "c++23 compression library",
+    "one_line": "one squeeze/swell interface over zlib, zstd, and lz4. errors are values. caller owns memory.",
+    "theme": "wetland / pond life; sibling of the tadpole project",
+    "license": "MIT",
+    "language_standard": "C++23",
+    "org_role": "compression package of the wetland ecosystem",
+    "naming_governance": "packages are pond life, versions are growth stages, the org is the water"
+  },
+  "verbs": {
+    "compress": "squeeze",
+    "decompress": "swell"
+  },
+  "components": {
+    "core": "polliwog::squeeze / polliwog::swell one-shot, span-based",
+    "streams": "polliwog::compressor / polliwog::decompressor, push/pull/finish",
+    "brood": "parallel batch engine; deterministic merge across a thread pool",
+    "pond": "test corpus: silesia, enwik, synthetic structured data"
+  },
+  "backends": {
+    "zlib": { "version": "1.3.2", "released": "2026-02-17", "license": "zlib", "role": "default; rfc1950/1951/1952 container formats" },
+    "zlib_ng": { "version": "2.3.3", "released": "2026-02-03", "license": "BSD-3", "role": "optional drop-in fast fork, symbol-mangled, off by default" },
+    "zstd": { "version": "1.5.7", "released": "2025-02-19", "license": "BSD-3", "role": "modern default for new data; dictionaries later" },
+    "lz4": { "version": "1.10.0", "released": "2024-07-22", "license": "BSD-2", "role": "speed floor backend; frame + block formats" }
+  },
+  "toolchain": {
+    "cmake_minimum": "3.28",
+    "compilers": { "msvc": "19.38+ (vs2022 17.8+)", "gcc": "13+", "clang": "17+", "apple_clang": "16+" },
+    "ci_runners": ["windows-latest", "ubuntu-24.04", "macos-15"],
+    "test_framework": "Catch2 v3",
+    "benchmark_framework": "Google Benchmark",
+    "fuzzing": "libFuzzer + AFL++ smoke corpus in CI",
+    "formatting": "clang-format owns layout; clang-tidy for smell",
+    "warning_policy": "warning-free is a hard gate on our code"
+  },
+  "versioning": {
+    "scheme": "CalVer YYYY.N.P; ecosystem packages pin by milestone, never by patch",
+    "stability_tiers": ["Stable", "Growing", "Experimental"],
+    "milestone_names": ["spawn", "hatch", "tadpole", "froglet", "frog"]
+  },
+  "milestones": [
+    { "version": "2026.1.0", "name": "spawn", "scope": "bootstrap: docs, ci, templates, backend contract, no public code" },
+    { "version": "2026.2.0", "name": "hatch", "scope": "zlib backend mvp: one-shot + streaming squeeze/swell, tests, benchmarks" },
+    { "version": "2026.3.0", "name": "tadpole", "scope": "zstd backend, error taxonomy frozen, fuzzing wired" },
+    { "version": "2026.4.0", "name": "froglet", "scope": "brood batch engine, mmap input, zlib-ng option, lz4 backend" },
+    { "version": "2027.1.0", "name": "frog", "scope": "vcpkg/conan packaging, docs site, abi freeze, lz4 promoted" }
+  ],
+  "non_goals": [
+    "archive formats (zip, tar) - that is frogspawn's job, someday, maybe",
+    "network or disk io in core",
+    "encryption",
+    "plugin systems, dependency injection, service locators",
+    "iostreams in the public api"
+  ],
+  "doc_index": {
+    "agents_operating_procedure": "AGENTS.md",
+    "philosophy": "dev/philosophy.md",
+    "architecture": "dev/architecture.md",
+    "style": "dev/style.md",
+    "versions": "dev/versions.md",
+    "differentiation": "dev/differentiation.md",
+    "roadmap": "dev/roadmap.md",
+    "github_workflow": "dev/github.md",
+    "research_log": "dev/research-log.md",
+    "near_term_plan": "dev/near-term.md",
+    "decisions_log": "dev/decisions.md"
+  },
+  "written": "2026-09-11"
+}
