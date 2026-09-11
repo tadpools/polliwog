@@ -18,6 +18,10 @@ described here before it has a test.
   - AGENTS.md: the operating procedure and the honesty law
   - contributing, security, license (MIT), changelog
   - .github: issue templates (bug, feature), pull request template
+- the cmake skeleton: the polliwog::polliwog interface target at
+  c++23, the option set from dev/architecture.md, default and debug
+  presets, and the clang-format/clang-tidy configs; configured and
+  built warning-free locally on msvc 19.51 (cmake 4.4.2)
 - the founding decisions, recorded in dev/decisions.md with their
   costs and change conditions
 
