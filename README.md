@@ -6,7 +6,7 @@ zstd, and lz4. errors are values. the caller owns the memory.
 polliwog is a second word for tadpole - two names for one small
 creature, like two forms of the same bytes. compress shrinks a frog
 back into a polliwog; decompress lets it grow. it is the compression
-package of the wetland ecosystem, sibling to [tadpole](https://github.com/).
+package of the wetland ecosystem, sibling to [tadpole](https://github.com/tadpools/tadpole).
 
 ## the shape of it
 
