@@ -114,3 +114,16 @@ sitting-sized steps, replaced at each milestone sitting; roadmap.md
 keeps the milestone-level truth. cost: one more file to keep honest.
 would change if: the file goes stale once - then it gets deleted
 rather than tolerated stale.
+
+## D13 - the label taxonomy is materialized as family:value
+(2026-09-11)
+
+dev/github.md's table lists label families and bare values; the repo
+labels render each cell as family:value (stage:idea, area:core,
+tier:stable, priority:high, community:good-first-issue). chosen so
+the four families stay distinguishable in the label list and the
+issue templates' defaults (area:core, stage:idea) resolve verbatim.
+cost: label text differs from the bare table values, so the table is
+read as family + value, not as literal label names. would change if:
+the templates or the table ever name labels another way - then both
+sides move in one commit.
