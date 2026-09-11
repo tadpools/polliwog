@@ -1,0 +1,16 @@
+# the smell gate (dev/style.md). starts narrow; a new check needs a
+# reason or it stays off.
+Checks: >
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
+  -readability-identifier-length
+
+# report-only at spawn; becomes a gate with the first public header
+WarningsAsErrors: ''
+
+HeaderFilterRegex: 'include/.*'
