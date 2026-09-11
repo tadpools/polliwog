@@ -88,7 +88,7 @@ file and it yields to nothing except the premise. spelled out:
 
 ## session ritual
 
-1. read manifest.json, philosophy.md, architecture.md. skim
+1. read dev/manifest.json, philosophy.md, architecture.md. skim
    style.md for the rule you are about to touch. check roadmap.md for
    where the work sits.
 2. verify before writing: run the relevant tests first. know what
