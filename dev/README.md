@@ -10,7 +10,7 @@ the wetland voice, inherited from tadpole.
 | order | file                 | job                                                        |
 |-------|----------------------|------------------------------------------------------------|
 | 0     | ../AGENTS.md         | the operating procedure. the honesty law lives here         |
-| 0     | manifest.json        | machine-readable project summary; parse this first          |
+| 0     | dev/manifest.json    | machine-readable project summary; parse this first          |
 | 1     | philosophy.md        | why. the constitution. stable; amend rarely                 |
 | 2     | architecture.md      | what. layers, types, backend contract, memory rules         |
 | 3     | style.md             | the c++ dialect. module shape, naming, errors, tests        |
