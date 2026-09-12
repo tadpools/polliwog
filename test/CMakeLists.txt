@@ -1,12 +1,8 @@
 # the test tree. catch2 is dev-only and never leaks into the installed
-# target (philosophy.md, belief 5).
+# target.
 
 include(FetchContent)
 
-# pinned to v3.16.0, verified against the upstream release. SYSTEM
-# keeps catch2 headers outside our warning gate - warnings from
-# third-party headers are upstream's problem, the same rule the c
-# backends get.
 FetchContent_Declare(catch2
   SYSTEM
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -20,5 +16,9 @@ add_executable(polliwog-tests
   unit/backend_test.cpp)
 target_link_libraries(polliwog-tests PRIVATE polliwog::polliwog Catch2::Catch2WithMain)
 polliwog_target_warnings(polliwog-tests)
+
+if(POLLIWOG_WITH_ZLIB)
+  target_sources(polliwog-tests PRIVATE unit/zlib_test.cpp)
+endif()
 
 add_test(NAME smoke COMMAND polliwog-tests)

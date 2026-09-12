@@ -39,8 +39,8 @@ struct fake_backend {
 
   using level = polliwog::zlib_level;
 
-  static handle make_squeezer(level) { return handle{}; }
-  static handle make_sweller() { return handle{}; }
+  static handle make_squeezer(polliwog::format, level) { return handle{}; }
+  static handle make_sweller(polliwog::format) { return handle{}; }
 
   static std::size_t bound(level, std::uint64_t in_size) {
     return in_size + 64;
@@ -76,7 +76,8 @@ static_assert(std::movable<fake_backend::handle>);
 static_assert(!std::copyable<fake_backend::handle>);
 
 TEST_CASE("the backend contract admits the fake and it behaves") {
-  auto h = fake_backend::make_squeezer(polliwog::zlib_level::best);
+  auto h = fake_backend::make_squeezer(polliwog::format::zlib,
+                                       polliwog::zlib_level::best);
   REQUIRE(h.in == 0);
 
   std::array<std::byte, 4> in{std::byte{1}, std::byte{2}, std::byte{3},
