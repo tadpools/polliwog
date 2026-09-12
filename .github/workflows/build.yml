@@ -66,10 +66,12 @@ jobs:
             if command -v md5sum &>/dev/null; then
               actual=$(md5sum "$dir/$f" | awk '{print $1}')
             else
-              actual=$(md5 -q "$dir/$f")
+              actual=$(md5 -q "$dir/$f" | tr '[:upper:]' '[:lower:]')
             fi
-            if [ "$actual" != "${md5s[$f]}" ]; then
-              echo "mismatch: $f expected ${md5s[$f]} got $actual"
+            expected="${md5s[$f]}"
+            echo "checking $f: expected=$expected actual=$actual"
+            if [ "$actual" != "$expected" ]; then
+              echo "mismatch: $f"
               ok=false
             fi
           done
