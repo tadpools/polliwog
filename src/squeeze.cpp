@@ -33,6 +33,13 @@ std::expected<squeeze_result, error> squeeze(format f, zlib_level lvl,
   auto r = squeezer.push(in, out);
   if (!r)
     return std::unexpected(r.error());
+
+  // gzip determinism: zlib writes mtime=0 (hardcoded) but the OS
+  // byte is a platform constant (OS_CODE). patch it to 0xff
+  // (unknown) so the output is identical on every platform.
+  if (f == format::gzip && r->bytes_out >= 10)
+    out[9] = std::byte{0xff};
+
   return squeeze_result{r->bytes_out};
 }
 

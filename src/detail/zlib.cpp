@@ -127,14 +127,28 @@ result zlib_sweller::push(std::span<const std::byte> in,
   std::uint64_t before_out = stream_->total_out;
 
   int ret = inflate(stream_.get(), Z_FINISH);
-  if (ret == Z_STREAM_END || ret == Z_OK || ret == Z_BUF_ERROR) {
-    std::uint64_t consumed = stream_->total_in - before_in;
-    std::uint64_t produced = stream_->total_out - before_out;
+  std::uint64_t consumed = stream_->total_in - before_in;
+  std::uint64_t produced = stream_->total_out - before_out;
+
+  if (ret == Z_STREAM_END) {
+    // stream ended; leftover input means extra data (concatenated
+    // gzip members or trailing garbage), per D10 policy
+    if (consumed < in.size())
+      return std::unexpected(
+          error{kind::stream_corrupt, backend_id::zlib,
+                static_cast<std::uint64_t>(stream_->total_in),
+                "extra data after end of stream"});
+    return progress{consumed, produced, true};
+  }
+
+  if (ret == Z_OK || ret == Z_BUF_ERROR) {
+    // stream not done; output filled before the stream ended
     if (consumed < in.size())
       return std::unexpected(
           error{kind::buffer_too_small, backend_id::zlib, 0, ""});
-    return progress{consumed, produced, ret == Z_STREAM_END};
+    return progress{consumed, produced, false};
   }
+
   return std::unexpected(error{kind::stream_corrupt, backend_id::zlib,
                                static_cast<std::uint64_t>(stream_->total_in),
                                "inflate"});
