@@ -22,7 +22,6 @@ target_compile_features(polliwog INTERFACE cxx_std_23)
 target_include_directories(polliwog INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 
-# the warning gate: our code only, consumers never inherit it
 function(polliwog_target_warnings tgt)
   if(POLLIWOG_WARNINGS)
     if(MSVC)
@@ -38,45 +37,60 @@ include(CheckIncludeFileCXX)
 if(POLLIWOG_WITH_ZLIB)
   include(FetchContent)
 
-  # prefer the system zlib when it exists and is not actually zlib-ng
-  # (zlib-ng defines ZLIBNG_VERSION; the real zlib does not)
-  find_package(ZLIB QUIET)
-  if(ZLIB_FOUND)
-    check_include_file_cxx(zlib-ng.h ZLIBNG_HEADER)
-    if(NOT ZLIBNG_HEADER AND NOT POLLIWOG_WITH_ZLIB_NG)
-      add_library(polliwog_backend STATIC
-        src/detail/zlib.cpp
-        src/squeeze.cpp)
-      target_link_libraries(polliwog_backend PRIVATE ZLIB::ZLIB)
-      target_link_libraries(polliwog_backend PUBLIC polliwog)
-      target_include_directories(polliwog_backend PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src)
-      polliwog_target_warnings(polliwog_backend)
-      set_target_properties(polliwog_backend PROPERTIES
-        POSITION_INDEPENDENT_CODE ON)
-      target_link_libraries(polliwog INTERFACE polliwog_backend)
-      set(_POLLIWOG_ZLIB_FOUND TRUE)
+  # zlib-ng in compat mode (ZLIB_COMPAT) exports the same targets as
+  # real zlib; when the option is on, it replaces zlib entirely rather
+  # than coexisting alongside it
+  if(POLLIWOG_WITH_ZLIB_NG)
+    FetchContent_Declare(zlib-ng
+      SYSTEM
+      GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng.git
+      GIT_TAG 2.3.3
+      GIT_SHALLOW TRUE)
+    set(ZLIB_COMPAT ON CACHE BOOL "" FORCE)
+    set(ZLIB_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+    set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(zlib-ng)
+  else()
+    # prefer the system zlib when it exists and is not actually zlib-ng
+    find_package(ZLIB QUIET)
+    if(ZLIB_FOUND)
+      check_include_file_cxx(zlib-ng.h ZLIBNG_HEADER)
+      if(NOT ZLIBNG_HEADER)
+        add_library(polliwog_backend STATIC
+          src/detail/zlib.cpp
+          src/squeeze.cpp)
+        target_link_libraries(polliwog_backend PRIVATE ZLIB::ZLIB)
+        target_link_libraries(polliwog_backend PUBLIC polliwog)
+        target_include_directories(polliwog_backend PRIVATE
+          ${CMAKE_CURRENT_SOURCE_DIR}/src)
+        polliwog_target_warnings(polliwog_backend)
+        set_target_properties(polliwog_backend PROPERTIES
+          POSITION_INDEPENDENT_CODE ON)
+        target_link_libraries(polliwog INTERFACE polliwog_backend)
+        set(_POLLIWOG_ZLIB_BACKEND_BUILT TRUE)
+      endif()
+    endif()
+
+    if(NOT _POLLIWOG_ZLIB_BACKEND_BUILT)
+      set(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+      set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+      FetchContent_Declare(zlib
+        SYSTEM
+        GIT_REPOSITORY https://github.com/madler/zlib.git
+        GIT_TAG v1.3.2
+        GIT_SHALLOW TRUE)
+      FetchContent_MakeAvailable(zlib)
     endif()
   endif()
 
-  if(NOT _POLLIWOG_ZLIB_FOUND)
-    set(ZLIB_BUILD_TESTING OFF CACHE BOOL "" FORCE)
-    FetchContent_Declare(zlib
-      SYSTEM
-      GIT_REPOSITORY https://github.com/madler/zlib.git
-      GIT_TAG v1.3.2
-      GIT_SHALLOW TRUE)
-    FetchContent_MakeAvailable(zlib)
-
+  if(NOT _POLLIWOG_ZLIB_BACKEND_BUILT)
     add_library(polliwog_backend STATIC
       src/detail/zlib.cpp
       src/squeeze.cpp)
     target_link_libraries(polliwog_backend PRIVATE zlibstatic)
     target_link_libraries(polliwog_backend PUBLIC polliwog)
     target_include_directories(polliwog_backend PRIVATE
-      ${CMAKE_CURRENT_SOURCE_DIR}/src
-      ${zlib_SOURCE_DIR}
-      ${zlib_BINARY_DIR})
+      ${CMAKE_CURRENT_SOURCE_DIR}/src)
     polliwog_target_warnings(polliwog_backend)
     set_target_properties(polliwog_backend PROPERTIES
       POSITION_INDEPENDENT_CODE ON)
@@ -84,24 +98,8 @@ if(POLLIWOG_WITH_ZLIB)
   endif()
 
   if(MSVC)
-    # /external:W0 suppresses warnings from the system zlib headers
-    # under the warning gate; fetchcontent's SYSTEM keyword and msvc
-    # disagree sometimes
     target_compile_options(polliwog_backend PRIVATE /external:W0)
   endif()
-endif()
-
-if(POLLIWOG_WITH_ZLIB_NG AND NOT _POLLIWOG_ZLIB_FOUND)
-  include(FetchContent)
-  FetchContent_Declare(zlib-ng
-    SYSTEM
-    GIT_REPOSITORY https://github.com/zlib-ng/zlib-ng.git
-    GIT_TAG 2.3.3
-    GIT_SHALLOW TRUE)
-  set(ZLIB_COMPAT ON CACHE BOOL "" FORCE)
-  set(ZLIB_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-  FetchContent_MakeAvailable(zlib-ng)
-  # when zlib-ng compat mode is on it exports as zlib; handled above
 endif()
 
 enable_testing()
