@@ -63,15 +63,14 @@ jobs:
           )
           ok=true
           for f in "${!md5s[@]}"; do
-            actual=$(openssl md5 "$dir/$f" | awk '{print $NF}')
+            actual=$(python3 -c "import hashlib; print(hashlib.md5(open('$dir/$f','rb').read()).hexdigest())")
             expected="${md5s[$f]}"
-            echo "$f expected=$expected actual=$actual" >> /tmp/checksums.txt
+            echo "$f expected=$expected actual=$actual"
             if [ "$actual" != "$expected" ]; then
-              echo "mismatch: $f" >> /tmp/checksums.txt
+              echo "MISMATCH: $f"
               ok=false
             fi
           done
-          cat /tmp/checksums.txt
           if [ "$ok" = false ]; then exit 1; fi
           echo "all checksums verified"
 
