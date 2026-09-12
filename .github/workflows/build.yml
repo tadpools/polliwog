@@ -65,12 +65,13 @@ jobs:
           for f in "${!md5s[@]}"; do
             actual=$(openssl md5 "$dir/$f" | awk '{print $NF}')
             expected="${md5s[$f]}"
-            echo "checking $f: expected=$expected actual=$actual"
+            echo "$f expected=$expected actual=$actual" >> /tmp/checksums.txt
             if [ "$actual" != "$expected" ]; then
-              echo "mismatch: $f"
+              echo "mismatch: $f" >> /tmp/checksums.txt
               ok=false
             fi
           done
+          cat /tmp/checksums.txt
           if [ "$ok" = false ]; then exit 1; fi
           echo "all checksums verified"
 
