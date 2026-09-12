@@ -23,12 +23,18 @@ add_library(polliwog::polliwog ALIAS polliwog)
 
 target_compile_features(polliwog INTERFACE cxx_std_23)
 
+target_include_directories(polliwog INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+
 # the warning gate applies to our code only; consumers never inherit
 # it. every target of ours calls this once.
 function(polliwog_target_warnings tgt)
   if(POLLIWOG_WARNINGS)
     if(MSVC)
-      target_compile_options(${tgt} PRIVATE /W4 /permissive- /WX)
+      # /we4062 makes a switch missing an enumerator a hard error, so
+      # the exhaustive kind_name/format_name switches are compiler
+      # enforced on msvc the way -Wswitch does it for gcc/clang
+      target_compile_options(${tgt} PRIVATE /W4 /permissive- /we4062 /WX)
     else()
       target_compile_options(${tgt} PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
