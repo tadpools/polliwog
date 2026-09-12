@@ -8,7 +8,19 @@ stages: spawn, hatch, tadpole, froglet, frog.
 every entry is checkable against the tag it ships in. nothing is
 described here before it has a test.
 
-## unreleased - 2026.1.0 (spawn)
+## unreleased - 2026.2.0 (hatch)
+
+scope boundary in dev/roadmap.md; the sitting plan lives in
+dev/near-term.md. zlib only, honestly labeled: one-shot and streaming
+squeeze/swell over zlib, gzip, and raw_deflate; the determinism
+contract with pond fixtures; allocator-counting tests; tracked
+benchmarks on the silesia corpus.
+
+## 2026.1.0 (spawn) - 2026-09-12
+
+released. the release notes are this section, per dev/github.md;
+the spawn gate was watched green on all six ci jobs (run
+34662292915).
 
 ### added
 
@@ -28,18 +40,18 @@ described here before it has a test.
   reports the compiler
 - the founding decisions, recorded in dev/decisions.md with their
   costs and change conditions
+- the contracts in code, tested (spawn sitting s4)
+  - include/polliwog/error.hpp: the kind enum, the error value, the
+    exhaustive kind_name and backend_id_name
+  - include/polliwog/format.hpp: the five wire formats and the typed
+    zlib_level, its anchors pinned to their zlib.h values (D14)
+  - include/detail/backend.hpp: the Backend concept, compile-checked
+    in both directions with a synthetic fake
+- the spawn gate, watched green on all six ci jobs (run
+  34662292915): cold clone, warnings gate on, tests passing on all
+  three runners
 
 ### not yet (stated honestly)
 
-- no compress or decompress exists yet. the contracts are in and
-  tested: the error taxonomy (error.hpp), the wire-format enum with
-  typed zlib levels (format.hpp), and the Backend concept
-  (detail/backend.hpp) with a compile-checked fake backend. the zlib
-  shim, one-shot squeeze/swell, and streaming land at hatch.
-
-## 2026.2.0 (hatch) - planned
-
-scope boundary in dev/roadmap.md. zlib only, honestly labeled:
-one-shot and streaming squeeze/swell over zlib, gzip, and raw_deflate;
-the error taxonomy; the determinism contract with pond fixtures;
-allocator-counting tests; tracked benchmarks on the silesia corpus.
+- no compress or decompress exists yet. the zlib shim, one-shot
+  squeeze/swell, and streaming land at hatch.
