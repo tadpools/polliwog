@@ -1,0 +1,44 @@
+// the format and level tests: the wire-format names resolve, and the
+// zlib level pins match the upstream documentation they cite.
+// Stability: Stable (hatch).
+
+#include "polliwog/format.hpp"
+
+#include <catch2/catch_test_macros.hpp>
+
+#include <array>
+#include <string>
+
+TEST_CASE("format_name covers every wire format, distinctly") {
+  constexpr std::array formats{
+      polliwog::format::zlib,        polliwog::format::gzip,
+      polliwog::format::raw_deflate, polliwog::format::zstd,
+      polliwog::format::lz4_frame,
+  };
+
+  // std::string copies, not string_view captures: catch2 v3.16
+  // declares StringMaker<string_view> without defining it
+  std::array<std::string, formats.size()> names{};
+  for (std::size_t i = 0; i < formats.size(); ++i) {
+    names[i] = std::string{polliwog::format_name(formats[i])};
+    INFO(names[i]);
+    REQUIRE_FALSE(names[i].empty());
+  }
+
+  for (std::size_t i = 0; i < names.size(); ++i) {
+    for (std::size_t j = i + 1; j < names.size(); ++j) {
+      REQUIRE(names[i] != names[j]);
+    }
+  }
+}
+
+TEST_CASE("the zlib level anchors hold their documented values") {
+  // provenance: zlib 1.3.2's zlib.h (dev/versions.md) - Z_BEST_SPEED
+  // is 1, Z_BEST_COMPRESSION is 9, and Z_DEFAULT_COMPRESSION is -1,
+  // documented as currently equivalent to level 6. polliwog pins 6
+  // so the determinism contract does not ride on the backend's
+  // default resolution (decision D14)
+  STATIC_REQUIRE(int(polliwog::zlib_level::fastest) == 1);
+  STATIC_REQUIRE(int(polliwog::zlib_level::default_level) == 6);
+  STATIC_REQUIRE(int(polliwog::zlib_level::best) == 9);
+}
