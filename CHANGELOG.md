@@ -31,10 +31,11 @@ described here before it has a test.
 
 ### not yet (stated honestly)
 
-- no library code exists. no backend shim, no public header, no ci
-  workflow. the spawn gate is infrastructure only: a cold clone
-  configures and builds an empty library, warning-free, on all three
-  ci runners.
+- no compress or decompress exists yet. the contracts are in and
+  tested: the error taxonomy (error.hpp), the wire-format enum with
+  typed zlib levels (format.hpp), and the Backend concept
+  (detail/backend.hpp) with a compile-checked fake backend. the zlib
+  shim, one-shot squeeze/swell, and streaming land at hatch.
 
 ## 2026.2.0 (hatch) - planned
 
