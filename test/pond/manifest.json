@@ -1,0 +1,18 @@
+{
+  "source": "http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia",
+  "total_size": 211938580,
+  "files": [
+    {"name": "dickens",  "size": 10192446, "md5": "88334708559f6db57d79096bc0aca07e"},
+    {"name": "mozilla",  "size": 51220480, "md5": "c7789a2097f1ff944b0c737430a339b3"},
+    {"name": "mr",       "size":  9970564, "md5": "38e623e3093b7bf2003ca4b1bbc19927"},
+    {"name": "nci",      "size": 33553445, "md5": "31f85bc8706f3c921104e7c169e2e2e1"},
+    {"name": "ooffice",  "size":  6152192, "md5": "573c4ae915e36631d8f2dcffb9b9b66d"},
+    {"name": "osdb",     "size": 10085684, "md5": "e734b0c48e6a982adfb5802da3032ecd"},
+    {"name": "reymont",  "size":  6627202, "md5": "d8f54d78105079775f32d76dc55fc671"},
+    {"name": "samba",    "size": 21606400, "md5": "154eaea7ea70e89f6339ff0abf4112ca"},
+    {"name": "sao",      "size":  7251944, "md5": "79e95a22e18cd82b7e42bf91b380d30b"},
+    {"name": "webster",  "size": 41458703, "md5": "474931ad907ac27bf962c75ded46c069"},
+    {"name": "xml",      "size":  5345280, "md5": "9b09c0c80104adb8aae910b7d7db003e"},
+    {"name": "x-ray",    "size":  8474240, "md5": "9baec32ad14ec3eff487d254382cb91c"}
+  ]
+}
