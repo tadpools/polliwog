@@ -42,7 +42,7 @@ the point.
 | format + typed zlib levels      | Stable (hatch)| in at spawn, tested |
 | backend contract (detail)       | internal      | in at spawn, tested |
 | one-shot squeeze/swell (zlib)   | Growing       | in at hatch, tested |
-| streaming push/pull/finish      | not yet       | hatch     |
+| streaming push/pull/finish      | Growing       | in at hatch, tested |
 | zstd backend                    | not yet       | tadpole   |
 | brood: parallel batch engine    | not yet       | froglet   |
 | mmap-backed file helpers        | not yet       | froglet   |

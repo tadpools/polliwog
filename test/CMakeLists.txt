@@ -20,7 +20,8 @@ polliwog_target_warnings(polliwog-tests)
 if(POLLIWOG_WITH_ZLIB)
   target_sources(polliwog-tests PRIVATE
     unit/zlib_test.cpp
-    unit/gzip_fixtures.cpp)
+    unit/gzip_fixtures.cpp
+    unit/stream_test.cpp)
 endif()
 
 add_test(NAME smoke COMMAND polliwog-tests)

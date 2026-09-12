@@ -30,7 +30,12 @@ public:
   zlib_squeezer(const zlib_squeezer &) = delete;
   zlib_squeezer &operator=(const zlib_squeezer &) = delete;
 
+  // compress more input without finishing the stream (streaming use)
+  result push_more(std::span<const std::byte> in, std::span<std::byte> out);
+
+  // compress and finish (one-shot use)
   result push(std::span<const std::byte> in, std::span<std::byte> out);
+
   result flush(std::span<std::byte> out);
   result finish(std::span<std::byte> out);
 
@@ -49,6 +54,10 @@ public:
   zlib_sweller(const zlib_sweller &) = delete;
   zlib_sweller &operator=(const zlib_sweller &) = delete;
 
+  // decompress more input without finishing (streaming use)
+  result push_more(std::span<const std::byte> in, std::span<std::byte> out);
+
+  // decompress and finish (one-shot use)
   result push(std::span<const std::byte> in, std::span<std::byte> out);
 
 private:

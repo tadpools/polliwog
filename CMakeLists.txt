@@ -58,7 +58,8 @@ if(POLLIWOG_WITH_ZLIB)
       if(NOT ZLIBNG_HEADER)
         add_library(polliwog_backend STATIC
           src/detail/zlib.cpp
-          src/squeeze.cpp)
+          src/squeeze.cpp
+          src/stream.cpp)
         target_link_libraries(polliwog_backend PRIVATE ZLIB::ZLIB)
         target_link_libraries(polliwog_backend PUBLIC polliwog)
         target_include_directories(polliwog_backend PRIVATE
@@ -86,7 +87,8 @@ if(POLLIWOG_WITH_ZLIB)
   if(NOT _POLLIWOG_ZLIB_BACKEND_BUILT)
     add_library(polliwog_backend STATIC
       src/detail/zlib.cpp
-      src/squeeze.cpp)
+      src/squeeze.cpp
+      src/stream.cpp)
     target_link_libraries(polliwog_backend PRIVATE zlibstatic)
     target_link_libraries(polliwog_backend PUBLIC polliwog)
     target_include_directories(polliwog_backend PRIVATE

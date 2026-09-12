@@ -27,6 +27,10 @@ benchmarks on the silesia corpus.
   containers.
 - round-trip property tests across formats and levels; determinism
   check; buffer_too_small and format_mismatch error paths.
+- streaming compressor and decompressor: push, flush (sync only,
+  per D9), finish on the compressor; push on the decompressor.
+  move-only, pimpl to keep internal headers out of the public
+  surface. streaming round-trip and flush tests.
 
 ## 2026.1.0 (spawn) - 2026-09-12
 

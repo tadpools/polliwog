@@ -72,6 +72,28 @@ result zlib_squeezer::push(std::span<const std::byte> in,
   return progress{consumed, produced, done};
 }
 
+result zlib_squeezer::push_more(std::span<const std::byte> in,
+                                std::span<std::byte> out) {
+  stream_->next_in =
+      reinterpret_cast<Bytef *>(const_cast<std::byte *>(in.data()));
+  stream_->avail_in = static_cast<uInt>(in.size());
+  stream_->next_out = reinterpret_cast<Bytef *>(out.data());
+  stream_->avail_out = static_cast<uInt>(out.size());
+
+  std::uint64_t before_in = stream_->total_in;
+  std::uint64_t before_out = stream_->total_out;
+
+  int ret = deflate(stream_.get(), Z_NO_FLUSH);
+  if (ret != Z_OK && ret != Z_BUF_ERROR) {
+    return std::unexpected(
+        error{kind::backend_failure, backend_id::zlib, 0, "deflate"});
+  }
+
+  std::uint64_t consumed = stream_->total_in - before_in;
+  std::uint64_t produced = stream_->total_out - before_out;
+  return progress{consumed, produced, false};
+}
+
 result zlib_squeezer::flush(std::span<std::byte> out) {
   stream_->next_in = Z_NULL;
   stream_->avail_in = 0;
@@ -148,6 +170,31 @@ result zlib_sweller::push(std::span<const std::byte> in,
           error{kind::buffer_too_small, backend_id::zlib, 0, ""});
     return progress{consumed, produced, false};
   }
+
+  return std::unexpected(error{kind::stream_corrupt, backend_id::zlib,
+                               static_cast<std::uint64_t>(stream_->total_in),
+                               "inflate"});
+}
+
+result zlib_sweller::push_more(std::span<const std::byte> in,
+                               std::span<std::byte> out) {
+  stream_->next_in =
+      reinterpret_cast<Bytef *>(const_cast<std::byte *>(in.data()));
+  stream_->avail_in = static_cast<uInt>(in.size());
+  stream_->next_out = reinterpret_cast<Bytef *>(out.data());
+  stream_->avail_out = static_cast<uInt>(out.size());
+
+  std::uint64_t before_in = stream_->total_in;
+  std::uint64_t before_out = stream_->total_out;
+
+  int ret = inflate(stream_.get(), Z_NO_FLUSH);
+  std::uint64_t consumed = stream_->total_in - before_in;
+  std::uint64_t produced = stream_->total_out - before_out;
+
+  if (ret == Z_STREAM_END)
+    return progress{consumed, produced, true};
+  if (ret == Z_OK || ret == Z_BUF_ERROR)
+    return progress{consumed, produced, false};
 
   return std::unexpected(error{kind::stream_corrupt, backend_id::zlib,
                                static_cast<std::uint64_t>(stream_->total_in),
