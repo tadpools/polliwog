@@ -68,6 +68,22 @@ issue #8.
 done-when: the matrix is green on a real run, watched, not assumed;
 the smoke test output is visible in the run log.
 
+sitting note (2026-09-12, closed): done, watched. the matrix ran on
+main and all six jobs went green (run 34660291929): ubuntu 39s/52s,
+macos 54s/1m12s, windows 1m40s/1m24s, zlib-only and all-backends.
+the smoke test output is visible in the job logs (test #1: smoke,
+passed; ci runners report msvc 19.51, matching the local machine).
+the format check failed on its first run - four hand-formatting
+violations in the smoke test - and passed after a chore(fmt) commit
+(Pr #13); the gate earned its keep on day one. one real bug found by
+watching locally: multi-config ctest presets need a pinned
+configuration (fixed before push). honest notes: catch2 v3.16.0 is
+fetched per build, so ci pays the clone every run; clang tools stay
+local-only via the pip wheel (18.1.8, matching the ci pin); the
+checkout action warns about node 20 deprecation - bump the tag at
+the next milestone sitting, verified against current releases then.
+pr #12, issue #11.
+
 ### sitting s4 - the contracts in code, spawn gate
 
 - include/polliwog/error.hpp: the kind enum + error struct +
