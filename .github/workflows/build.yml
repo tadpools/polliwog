@@ -63,7 +63,8 @@ jobs:
           )
           ok=true
           for f in "${!md5s[@]}"; do
-            actual=$(python3 -c "import hashlib; print(hashlib.md5(open('$dir/$f','rb').read()).hexdigest())")
+            filepath="$dir/$f"
+            actual=$(python3 -c "import hashlib,sys; print(hashlib.md5(open(sys.argv[1],'rb').read()).hexdigest())" "$filepath")
             expected="${md5s[$f]}"
             echo "$f expected=$expected actual=$actual"
             if [ "$actual" != "$expected" ]; then
