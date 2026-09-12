@@ -31,12 +31,14 @@ jobs:
           set -e
           dir="test/pond/corpus/large"
           mkdir -p "$dir"
-          url="http://sun.aei.polsl.pl/~sdeor/corpus"
+          url="https://raw.githubusercontent.com/MiloszKrajewski/SilesiaCorpus/master"
           files="dickens mozilla mr nci ooffice osdb reymont samba sao webster xml x-ray"
           for f in $files; do
             if [ ! -f "$dir/$f" ]; then
               echo "downloading $f"
-              curl -sS -o "$dir/$f" "$url/$f"
+              curl -sS -o "$dir/$f.zip" "$url/$f.zip"
+              unzip -o -d "$dir" "$dir/$f.zip"
+              rm "$dir/$f.zip"
             fi
           done
 

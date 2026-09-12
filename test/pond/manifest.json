@@ -1,5 +1,5 @@
 {
-  "source": "http://sun.aei.polsl.pl/~sdeor/index.php?page=silesia",
+  "source": "https://github.com/MiloszKrajewski/SilesiaCorpus",
   "total_size": 211938580,
   "files": [
     {"name": "dickens",  "size": 10192446, "md5": "88334708559f6db57d79096bc0aca07e"},
