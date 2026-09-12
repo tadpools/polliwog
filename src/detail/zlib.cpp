@@ -154,7 +154,7 @@ result zlib_sweller::push(std::span<const std::byte> in,
 
   if (ret == Z_STREAM_END) {
     // stream ended; leftover input means extra data (concatenated
-    // gzip members or trailing garbage), per D10 policy
+    // gzip members or trailing garbage
     if (consumed < in.size())
       return std::unexpected(
           error{kind::stream_corrupt, backend_id::zlib,

@@ -16,7 +16,7 @@
 //   handle    move-only raii state; the destructor is the only
 //             cleanup, and the c api never leaks past this type.
 //             single-threaded by contract: one handle, one thread
-//             at a time, no internal locking (decision D11)
+//             at a time, no internal locking
 //   make_squeezer(format, level)
 //             a handle ready to compress that container at that level
 //   make_sweller(format)  a handle ready to decompress that container

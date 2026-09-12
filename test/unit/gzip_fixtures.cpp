@@ -1,4 +1,4 @@
-// gzip determinism fixtures and the single-member policy (D10).
+// gzip determinism fixtures and the single-member policy.
 // byte-level pins on the gzip header layout; raw_deflate no-container
 // verification; concatenated gzip is stream_corrupt, not
 // buffer_too_small.
@@ -14,7 +14,8 @@
 using byte = std::byte;
 
 TEST_CASE("gzip pins mtime=0 and os=unknown") {
-  // rfc 1952 section 2.3.1, byte layout of the gzip header
+  // rfc 1952 section 2.3.1, byte layout of the gzip header.
+  // mtime=0 and os=unknown per the determinism contract.
   std::array<byte, 100> src{};
   for (std::size_t i = 0; i < src.size(); ++i)
     src[i] = static_cast<byte>(i & 0xff);
@@ -99,7 +100,7 @@ TEST_CASE("single-member gzip only: concat is stream_corrupt") {
       polliwog::swell(polliwog::format::gzip, std::span<const byte>{concat},
                       std::span<byte>{decompressed});
 
-  // D10: single-member policy; a second member after the first trailer
+  // single-member policy: a second member after the first trailer
   // is stream_corrupt with the byte position named
   REQUIRE_FALSE(r.has_value());
   REQUIRE(r.error().k == polliwog::kind::stream_corrupt);

@@ -1,6 +1,6 @@
 // polliwog/error.hpp - the one error taxonomy. errors are values;
 // nothing in the public api throws.
-// Stability: Stable (hatch).
+// Stability: Stable .
 //
 // every fallible call in polliwog returns std::expected<T, error>.
 // callers switch on kind, never parse strings; the note carries the

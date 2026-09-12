@@ -1,6 +1,6 @@
 // round-trip tests for the zlib backend: squeeze then swell of the
 // same data must be byte-identical, across formats and levels.
-// Stability: Growing (hatch).
+// Stability: Growing .
 
 #include "polliwog/squeeze.hpp"
 

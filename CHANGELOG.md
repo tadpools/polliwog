@@ -3,12 +3,12 @@
 format follows keep a changelog 1.1.0; versions are calver (YYYY.N.P).
 a milestone (YYYY.N.0)
 may break; a patch (YYYY.N.P) may not. milestone names are growth
-stages: spawn, hatch, tadpole, froglet, frog.
+stages: 2026.1.0, 2026.2.0, 2026.3.0, 2026.4.0, 2027.1.0.
 
 every entry is checkable against the tag it ships in. nothing is
 described here before it has a test.
 
-## unreleased - 2026.2.0 (hatch)
+## unreleased - 2026.2.0
 
 zlib only, honestly labeled: one-shot and streaming
 squeeze/swell over zlib, gzip, and raw_deflate; the determinism
@@ -32,9 +32,9 @@ benchmarks on the silesia corpus.
   move-only, pimpl to keep internal headers out of the public
   surface. streaming round-trip and flush tests.
 
-## 2026.1.0 (spawn) - 2026-09-12
+## 2026.1.0 - 2026-09-12
 
-released. the spawn gate was watched green on all six ci jobs (run
+released. the gate was watched green on all six ci jobs (run
 34662292915).
 
 ### added
@@ -52,18 +52,18 @@ released. the spawn gate was watched green on all six ci jobs (run
   reports the compiler
 - the founding decisions, recorded in the decision log with their
   costs and change conditions
-- the contracts in code, tested (spawn sitting s4)
+- the contracts in code, tested (2026.1.0)
   - include/polliwog/error.hpp: the kind enum, the error value, the
     exhaustive kind_name and backend_id_name
   - include/polliwog/format.hpp: the five wire formats and the typed
-    zlib_level, its anchors pinned to their zlib.h values (D14)
+    zlib_level, its anchors pinned to their zlib.h values
   - include/detail/backend.hpp: the Backend concept, compile-checked
     in both directions with a synthetic fake
-- the spawn gate, watched green on all six ci jobs (run
+- the gate, watched green on all six ci jobs (run
   34662292915): cold clone, warnings gate on, tests passing on all
   three runners
 
 ### not yet (stated honestly)
 
 - no compress or decompress exists yet. the zlib shim, one-shot
-  squeeze/swell, and streaming land at hatch.
+  squeeze/swell, and streaming land in 2026.2.0.

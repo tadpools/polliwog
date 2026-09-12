@@ -1,5 +1,5 @@
 // polliwog/squeeze.hpp - one-shot compress and decompress.
-// Stability: Growing (hatch).
+// Stability: Growing .
 //
 // squeeze(format, level, in, out): compress in into out, return
 // bytes written on success. bound() gives the honest upper size for
@@ -12,8 +12,8 @@
 // compressed stream (squeeze's bytes_written worth).
 //
 // the one-shot layer is a pure function: no globals, no statics, no
-// hidden state (decision D11). concurrent calls on distinct buffers
-// are safe by contract.
+// hidden state. concurrent calls on distinct buffers are safe by
+// contract.
 //
 // see also: detail/backend.hpp, polliwog/format.hpp
 

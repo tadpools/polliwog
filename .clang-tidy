@@ -10,7 +10,7 @@ Checks: >
   -readability-magic-numbers,
   -readability-identifier-length
 
-# report-only at spawn; becomes a gate with the first public header
+# report-only until the first public header makes it a gate
 WarningsAsErrors: ''
 
 HeaderFilterRegex: 'include/.*'

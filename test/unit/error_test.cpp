@@ -1,6 +1,6 @@
 // the error taxonomy tests: every name resolves, every name is
 // distinct, the value is honest about its defaults.
-// Stability: Stable (hatch).
+// Stability: Stable .
 
 #include "polliwog/error.hpp"
 

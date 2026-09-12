@@ -1,5 +1,5 @@
 // polliwog/stream.hpp - streaming compressor and decompressor.
-// Stability: Growing (hatch).
+// Stability: Growing .
 //
 // the streaming types wrap the same backend the one-shot layer uses,
 // at a different height: multiple push calls accumulate state, flush

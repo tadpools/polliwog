@@ -10,8 +10,8 @@ allocation, infinite loops.
 
 | milestone | status      | security fixes |
 |-----------|-------------|----------------|
-| spawn     | bootstrap   | n/a - nothing shipped yet |
-| hatch+    | supported   | patch releases (YYYY.N.P) for security fixes, named in the changelog |
+| 2026.1.0  | released    | n/a - contracts only |
+| 2026.2.0+ | supported   | patch releases (YYYY.N.P) for security fixes, named in the changelog |
 
 ## reporting
 

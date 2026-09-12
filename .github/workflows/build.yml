@@ -19,7 +19,7 @@ jobs:
 
       # zlib-only is the default option set; all-backends turns on
       # every backend option. until h1 none of them fetch anything,
-      # but the matrix shape is the spawn contract.
+      # but the matrix shape is the contract.
       - name: configure
         run: >
           cmake --preset default

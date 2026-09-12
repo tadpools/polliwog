@@ -1,5 +1,5 @@
 // polliwog/format.hpp - the wire formats and the typed levels.
-// Stability: Stable (hatch).
+// Stability: Stable .
 //
 // formats are named for the wire container, never for the backend
 // brand alone: a gzip stream is gzip, produced by the zlib backend.
@@ -27,8 +27,8 @@ enum class format {
   zlib,        // rfc 1950
   gzip,        // rfc 1952
   raw_deflate, // rfc 1951, no container
-  zstd,        // the zstd frame format (tadpole milestone)
-  lz4_frame,   // the lz4 frame format (froglet milestone)
+  zstd,        // the zstd frame format (2026.3.0)
+  lz4_frame,   // the lz4 frame format (2026.4.0)
 };
 
 // value to human text; exhaustive over format with no default case,

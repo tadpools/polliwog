@@ -1,6 +1,6 @@
 // the format and level tests: the wire-format names resolve, and the
 // zlib level pins match the upstream documentation they cite.
-// Stability: Stable (hatch).
+// Stability: Stable .
 
 #include "polliwog/format.hpp"
 
@@ -37,7 +37,7 @@ TEST_CASE("the zlib level anchors hold their documented values") {
   // is 1, Z_BEST_COMPRESSION is 9, and Z_DEFAULT_COMPRESSION is -1,
   // documented as currently equivalent to level 6. polliwog pins 6
   // so the determinism contract does not ride on the backend's
-  // default resolution (decision D14)
+  // default resolution.
   STATIC_REQUIRE(int(polliwog::zlib_level::fastest) == 1);
   STATIC_REQUIRE(int(polliwog::zlib_level::default_level) == 6);
   STATIC_REQUIRE(int(polliwog::zlib_level::best) == 9);

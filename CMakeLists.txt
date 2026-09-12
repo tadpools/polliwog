@@ -8,8 +8,8 @@ project(polliwog
 
 option(POLLIWOG_WITH_ZLIB "zlib backend" ON)
 option(POLLIWOG_WITH_ZLIB_NG "swap to zlib-ng, symbol-mangled" OFF)
-option(POLLIWOG_WITH_ZSTD "zstd backend (tadpole milestone)" OFF)
-option(POLLIWOG_WITH_LZ4 "lz4 backend (froglet milestone)" OFF)
+option(POLLIWOG_WITH_ZSTD "zstd backend (2026.3.0)" OFF)
+option(POLLIWOG_WITH_LZ4 "lz4 backend (2026.4.0)" OFF)
 option(POLLIWOG_WARNINGS "treat warnings on our code as errors" ON)
 option(POLLIWOG_SANITIZERS "asan + ubsan on our targets" OFF)
 option(POLLIWOG_CXX26 "opt-in c++26 experiments; never required" OFF)
