@@ -18,7 +18,9 @@ target_link_libraries(polliwog-tests PRIVATE polliwog::polliwog Catch2::Catch2Wi
 polliwog_target_warnings(polliwog-tests)
 
 if(POLLIWOG_WITH_ZLIB)
-  target_sources(polliwog-tests PRIVATE unit/zlib_test.cpp)
+  target_sources(polliwog-tests PRIVATE
+    unit/zlib_test.cpp
+    unit/gzip_fixtures.cpp)
 endif()
 
 add_test(NAME smoke COMMAND polliwog-tests)
