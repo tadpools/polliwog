@@ -15,6 +15,19 @@ squeeze/swell over zlib, gzip, and raw_deflate; the determinism
 contract with pond fixtures; allocator-counting tests; tracked
 benchmarks on the silesia corpus.
 
+### added
+
+- zlib backend (POLLIWOG_WITH_ZLIB, default on): raii handles over
+  z_stream, the _z entry points preferred (zlib 1.3.2), window bits
+  per container. fetches zlib from the official mirror when no
+  system package is found.
+- one-shot squeeze(format, level, in, out) and swell(format, in,
+  out): compress and decompress in a single call, pure functions,
+  no hidden state. bound() via compressBound, honest for all three
+  containers.
+- round-trip property tests across formats and levels; determinism
+  check; buffer_too_small and format_mismatch error paths.
+
 ## 2026.1.0 (spawn) - 2026-09-12
 
 released. the spawn gate was watched green on all six ci jobs (run

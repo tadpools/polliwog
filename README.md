@@ -41,7 +41,7 @@ the point.
 | error + kind taxonomy           | Stable (hatch)| in at spawn, tested |
 | format + typed zlib levels      | Stable (hatch)| in at spawn, tested |
 | backend contract (detail)       | internal      | in at spawn, tested |
-| one-shot squeeze/swell (zlib)   | not yet       | hatch     |
+| one-shot squeeze/swell (zlib)   | Growing       | in at hatch, tested |
 | streaming push/pull/finish      | not yet       | hatch     |
 | zstd backend                    | not yet       | tadpole   |
 | brood: parallel batch engine    | not yet       | froglet   |
