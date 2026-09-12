@@ -13,7 +13,11 @@ FetchContent_Declare(catch2
   GIT_TAG v3.16.0)
 FetchContent_MakeAvailable(catch2)
 
-add_executable(polliwog-tests unit/smoke.cpp)
+add_executable(polliwog-tests
+  unit/smoke.cpp
+  unit/error_test.cpp
+  unit/format_test.cpp
+  unit/backend_test.cpp)
 target_link_libraries(polliwog-tests PRIVATE polliwog::polliwog Catch2::Catch2WithMain)
 polliwog_target_warnings(polliwog-tests)
 
