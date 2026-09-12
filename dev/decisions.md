@@ -127,3 +127,16 @@ cost: label text differs from the bare table values, so the table is
 read as family + value, not as literal label names. would change if:
 the templates or the table ever name labels another way - then both
 sides move in one commit.
+
+## D14 - zlib's default level is pinned to 6, not inherited as -1
+(2026-09-12)
+
+zlib.h documents Z_DEFAULT_COMPRESSION as -1, "currently equivalent
+to level 6"; polliwog's zlib_level::default_level pins 6 explicitly.
+chosen so the determinism contract (same input, same level,
+byte-identical output) does not depend on how the backend resolves
+its own default on a given day or version bump. cost: if zlib ever
+changed the -1 mapping, we would not follow it silently - the pin
+would be re-decided here, not discovered in a diff. would change if:
+a caller need for real -1 semantics shows up; it becomes an explicit
+option, never the default (the same rule as D7's timestamps).

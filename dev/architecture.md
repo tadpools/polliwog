@@ -155,7 +155,7 @@ documented and the fixtures updated the same day.
 | polliwog/format.hpp   | Stable (hatch)| format + typed level enums                  |
 | polliwog/brood.hpp    | Experimental (froglet) | parallel batch engine              |
 | polliwog/files.hpp    | Growing (froglet) | file conveniences over spans            |
-| detail/backend.hpp    | internal      | the Backend concept + backend registry      |
+| detail/backend.hpp    | internal      | the Backend concept                        |
 | detail/zlib.hpp       | internal      | zlib/zlib-ng shim                          |
 | detail/zstd.hpp       | internal      | zstd shim (tadpole milestone)              |
 | detail/lz4.hpp        | internal      | lz4 shim (froglet milestone)               |
