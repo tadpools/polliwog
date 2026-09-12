@@ -12,7 +12,7 @@ what the library will do that it does not.
 
 **the adoption ladder step**
 
-a feature walks the stairs in dev/philosophy.md: spec/fixture/pure
+a feature is adopted one step at a time: spec/fixture/pure
 function/backend/header/convenience. name the step this feature starts
 at, or say "parking lot" honestly:
 

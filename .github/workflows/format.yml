@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # the floor is 17 (dev/versions.md); the runner's apt pool
+      # the floor is 17; the runner's apt pool
       # carries 18, pinned here per the ci-pins rule in the same file
       - name: install clang-format
         run: sudo apt-get update && sudo apt-get install -y clang-format-18

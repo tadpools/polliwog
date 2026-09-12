@@ -5,9 +5,8 @@ backend shim, brood, docs.
 
 ## why
 
-trace to a root or a belief in dev/philosophy.md, or link the issue.
-non-obvious decisions: link the decision record line in
-dev/decisions.md.
+trace to a project contract or a belief in the readme, or link the
+issue. non-obvious decisions: link the decision note.
 
 ## which test proves it
 

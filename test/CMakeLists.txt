@@ -3,7 +3,7 @@
 
 include(FetchContent)
 
-# pinned to v3.16.0, provenance dev/research-log.md row 10. SYSTEM
+# pinned to v3.16.0, verified against the upstream release. SYSTEM
 # keeps catch2 headers outside our warning gate - warnings from
 # third-party headers are upstream's problem, the same rule the c
 # backends get.

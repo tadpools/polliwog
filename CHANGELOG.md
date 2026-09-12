@@ -1,7 +1,7 @@
 # changelog
 
-format follows keep a changelog 1.1.0; versions are calver (YYYY.N.P),
-per dev/versions.md and the tadpole governance. a milestone (YYYY.N.0)
+format follows keep a changelog 1.1.0; versions are calver (YYYY.N.P).
+a milestone (YYYY.N.0)
 may break; a patch (YYYY.N.P) may not. milestone names are growth
 stages: spawn, hatch, tadpole, froglet, frog.
 
@@ -10,35 +10,30 @@ described here before it has a test.
 
 ## unreleased - 2026.2.0 (hatch)
 
-scope boundary in dev/roadmap.md; the sitting plan lives in
-dev/near-term.md. zlib only, honestly labeled: one-shot and streaming
+zlib only, honestly labeled: one-shot and streaming
 squeeze/swell over zlib, gzip, and raw_deflate; the determinism
 contract with pond fixtures; allocator-counting tests; tracked
 benchmarks on the silesia corpus.
 
 ## 2026.1.0 (spawn) - 2026-09-12
 
-released. the release notes are this section, per dev/github.md;
-the spawn gate was watched green on all six ci jobs (run
+released. the spawn gate was watched green on all six ci jobs (run
 34662292915).
 
 ### added
 
-- the repository bootstrap: docs, contracts, and workflow
-  - dev/: philosophy, architecture, style, versions, differentiation,
-    roadmap, github workflow, research log, near-term plan
-  - AGENTS.md: the operating procedure and the honesty law
+- the repository bootstrap: contracts and workflow
   - contributing, security, license (MIT), changelog
   - .github: issue templates (bug, feature), pull request template
 - the cmake skeleton: the polliwog::polliwog interface target at
-  c++23, the option set from dev/architecture.md, default and debug
+  c++23, the option set from the readme, default and debug
   presets, and the clang-format/clang-tidy configs; configured and
   built warning-free locally on msvc 19.51 (cmake 4.4.2)
 - ci: the build matrix (windows-latest, ubuntu-24.04, macos-15 x
   zlib-only/all-backends), the clang-format check, and catch2
   v3.16.0 with a smoke test that verifies the c++23 floor and
   reports the compiler
-- the founding decisions, recorded in dev/decisions.md with their
+- the founding decisions, recorded in the decision log with their
   costs and change conditions
 - the contracts in code, tested (spawn sitting s4)
   - include/polliwog/error.hpp: the kind enum, the error value, the

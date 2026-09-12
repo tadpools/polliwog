@@ -1,4 +1,4 @@
-# the smell gate (dev/style.md). starts narrow; a new check needs a
+# the smell gate. starts narrow; a new check needs a
 # reason or it stays off.
 Checks: >
   bugprone-*,

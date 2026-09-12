@@ -25,7 +25,7 @@ behavior. a failing input is evidence; a description alone is not.
 ## how findings are triaged
 
 - fuzz findings are security findings by default and get the security
-  triage lane, per dev/github.md.
+  triage lane.
 - reports are acknowledged within 48 hours during milestone sittings,
   and honestly when slower.
 - a fix lands as a patch release when the wire contract allows it, or
@@ -36,6 +36,7 @@ behavior. a failing input is evidence; a description alone is not.
 
 ## the standing rule
 
-the determinism and memory tables in dev/architecture.md are security
+the determinism and memory contracts in the header docs are security
 documentation, not marketing: the allocator-counting and fuzz tests
-enforce them. a report that a table row is false is a security report.
+enforce them. a report that a contract row is false is a security
+report.

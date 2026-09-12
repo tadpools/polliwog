@@ -74,8 +74,8 @@ packages pin by milestone, never by patch.
 ## backends
 
 zlib 1.3.2 (default) - zlib-ng 2.3.3 (optional) - zstd 1.5.7 -
-lz4 1.10.0. pinned in `dev/versions.md`; licenses permissive, named in
-the same file.
+lz4 1.10.0. versions are pinned by the maintainers; licenses
+permissive, verified before packaging.
 
 ## building
 
@@ -88,16 +88,17 @@ options: `POLLIWOG_WITH_ZLIB` (default on), `POLLIWOG_WITH_ZSTD`,
 
 ## contributing
 
-see [CONTRIBUTING.md](CONTRIBUTING.md) and [dev/github.md](dev/github.md)
-for the shipping rhythm: conventional commits, small pull requests,
-decision records for non-obvious calls.
+see [CONTRIBUTING.md](CONTRIBUTING.md) for the shipping rhythm:
+conventional commits, small pull requests, decision records for
+non-obvious calls.
 
 ## license
 
-MIT. backend licenses (zlib, BSD-3, BSD-2) are named in
-`dev/versions.md`.
+MIT. backend licenses (zlib, BSD-3, BSD-2) are permissive and
+redistribution-friendly; each is verified against the backend's own
+license file before packaging.
 
 ## status
 
-spawn. the repository is bootstrap-stage: docs, ci, and contracts
-first, public code at hatch. see [dev/roadmap.md](dev/roadmap.md).
+spawn, released as 2026.1.0. the contracts are in and tested; public
+code lands at hatch. the versioning section above is the roadmap.

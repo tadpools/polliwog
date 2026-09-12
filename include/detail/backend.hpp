@@ -1,7 +1,7 @@
 // detail/backend.hpp - the Backend concept, the whole integration
 // surface for a compression engine.
 // Stability: internal (detail). reachable, honest, moving faster
-// than the public headers (dev/style.md).
+// than the public headers.
 //
 // a backend is a type, not an object: stateless, selected at compile
 // time by the format enum, checked by this concept at build time. a

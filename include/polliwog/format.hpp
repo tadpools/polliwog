@@ -36,7 +36,7 @@ enum class format {
 std::string_view format_name(format f);
 
 // zlib's compression levels. the numbers are pinned, not inherited:
-// zlib.h (zlib 1.3.2, dev/versions.md) documents Z_BEST_SPEED as 1,
+// zlib.h (zlib 1.3.2) documents Z_BEST_SPEED as 1,
 // Z_BEST_COMPRESSION as 9, and Z_DEFAULT_COMPRESSION as -1,
 // "currently equivalent to level 6". polliwog pins 6 explicitly so
 // the determinism contract does not depend on how the backend

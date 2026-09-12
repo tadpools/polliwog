@@ -18,8 +18,8 @@ namespace {
 
 // a synthetic engine that satisfies the contract without touching a
 // real codec. the bound constant below is a made-up number for shape
-// only - it is not a measured bound and pins nothing (dev/near-term
-// s4: the real engines arrive at h1)
+// only - it is not a measured bound and pins nothing (the real
+// engines arrive with the zlib shim)
 struct fake_backend {
   struct handle {
     handle() = default;

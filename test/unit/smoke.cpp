@@ -1,5 +1,5 @@
-// the s3 smoke test (dev/near-term.md): proves the runner runs, the
-// c++23 floor holds, and the toolchain reports itself.
+// the smoke test: proves the runner runs, the c++23 floor holds, and
+// the toolchain reports itself.
 // Stability: Stable.
 
 #include <catch2/catch_test_macros.hpp>
@@ -28,9 +28,9 @@ TEST_CASE("the runner runs, the floor holds, the compiler reports") {
   INFO("compiler: " << (compiler.empty() ? std::string("unrecognized")
                                          : compiler));
 
-  // monadic expected is the load-bearing c++23 feature
-  // (dev/versions.md); a toolchain that cannot do this sits below
-  // the floor and must fail here, loudly
+  // monadic expected is the load-bearing c++23 feature; a toolchain
+  // that cannot do this sits below the floor and must fail here,
+  // loudly
   auto const r = std::expected<int, int>{1}.and_then(
       [](int v) { return std::expected<int, int>{v + 1}; });
   REQUIRE(r.value() == 2);

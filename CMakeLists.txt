@@ -6,7 +6,7 @@ project(polliwog
   HOMEPAGE_URL "https://github.com/tadpools/polliwog"
   LANGUAGES CXX)
 
-# the option set from dev/architecture.md; this file and that table
+# the option set documented in the readme; this file and that table
 # move together
 option(POLLIWOG_WITH_ZLIB "zlib backend; the only one for now" ON)
 option(POLLIWOG_WITH_ZLIB_NG "swap the zlib shim for zlib-ng, symbol-mangled" OFF)

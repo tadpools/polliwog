@@ -33,7 +33,7 @@ TEST_CASE("format_name covers every wire format, distinctly") {
 }
 
 TEST_CASE("the zlib level anchors hold their documented values") {
-  // provenance: zlib 1.3.2's zlib.h (dev/versions.md) - Z_BEST_SPEED
+  // provenance: zlib 1.3.2's zlib.h - Z_BEST_SPEED
   // is 1, Z_BEST_COMPRESSION is 9, and Z_DEFAULT_COMPRESSION is -1,
   // documented as currently equivalent to level 6. polliwog pins 6
   // so the determinism contract does not ride on the backend's
