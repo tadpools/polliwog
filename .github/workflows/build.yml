@@ -63,11 +63,7 @@ jobs:
           )
           ok=true
           for f in "${!md5s[@]}"; do
-            if command -v md5sum &>/dev/null; then
-              actual=$(md5sum "$dir/$f" | awk '{print $1}')
-            else
-              actual=$(md5 -q "$dir/$f" | tr '[:upper:]' '[:lower:]')
-            fi
+            actual=$(openssl md5 "$dir/$f" | awk '{print $NF}')
             expected="${md5s[$f]}"
             echo "checking $f: expected=$expected actual=$actual"
             if [ "$actual" != "$expected" ]; then
