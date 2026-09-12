@@ -17,8 +17,9 @@
 //             cleanup, and the c api never leaks past this type.
 //             single-threaded by contract: one handle, one thread
 //             at a time, no internal locking (decision D11)
-//   make_squeezer(level)  a handle ready to compress at that level
-//   make_sweller()        a handle ready to decompress
+//   make_squeezer(format, level)
+//             a handle ready to compress that container at that level
+//   make_sweller(format)  a handle ready to decompress that container
 //   push(handle, in, out) compress or decompress as much of in as
 //             out can hold; may consume less than all of in.
 //             progress reports what was consumed and produced. no
@@ -67,8 +68,10 @@ concept backend =
       { B::formats() } -> std::convertible_to<std::span<const format>>;
     } &&
     requires(typename B::level lvl, std::uint64_t in_size) {
-      { B::make_squeezer(lvl) } -> std::convertible_to<typename B::handle>;
-      { B::make_sweller() } -> std::convertible_to<typename B::handle>;
+      {
+        B::make_squeezer(format{}, lvl)
+      } -> std::convertible_to<typename B::handle>;
+      { B::make_sweller(format{}) } -> std::convertible_to<typename B::handle>;
       { B::bound(lvl, in_size) } -> std::convertible_to<std::size_t>;
     } &&
     requires(typename B::handle &h, std::span<const std::byte> in,
