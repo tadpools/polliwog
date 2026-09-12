@@ -158,8 +158,9 @@ std::size_t zlib_backend::bound(level, std::uint64_t in_size) {
   // gzip and raw deflate produce less overhead than the zlib wrapper
   // it accounts for
   uLong r = compressBound(static_cast<uLong>(in_size));
-  return r == Z_MEM_ERROR ? std::numeric_limits<std::size_t>::max()
-                          : static_cast<std::size_t>(r);
+  return static_cast<long>(r) == Z_MEM_ERROR
+             ? std::numeric_limits<std::size_t>::max()
+             : static_cast<std::size_t>(r);
 }
 
 result zlib_backend::push(handle &h, std::span<const std::byte> in,
