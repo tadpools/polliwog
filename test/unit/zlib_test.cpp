@@ -93,9 +93,10 @@ TEST_CASE("zlib buffer_too_small fires before writing") {
 }
 
 TEST_CASE("unsupported format returns format_mismatch") {
+  // lz4_frame has no backend yet; squeeze must fail with format_mismatch
   std::array<byte, 16> src{};
   std::array<byte, 128> out{};
-  auto r = polliwog::squeeze(polliwog::format::zstd,
+  auto r = polliwog::squeeze(polliwog::format::lz4_frame,
                              polliwog::zlib_level::default_level,
                              std::span<const byte>{src}, std::span<byte>{out});
   REQUIRE_FALSE(r.has_value());
