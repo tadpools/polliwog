@@ -34,15 +34,13 @@ TEST_CASE("zstd round-trip across levels") {
         polliwog::zstd_level::best}) {
     INFO("level=" << static_cast<int>(lvl));
 
-    std::size_t cap =
-        polliwog::bound(polliwog::format::zstd, polliwog::zlib_level{6},
-                        src.size());
+    std::size_t cap = polliwog::bound(polliwog::format::zstd,
+                                      polliwog::zlib_level{6}, src.size());
     REQUIRE(cap > 0);
     REQUIRE(cap >= src.size());
 
     std::vector<byte> compressed(cap);
-    auto sr = polliwog::squeeze(polliwog::format::zstd,
-                                polliwog::zlib_level{6},
+    auto sr = polliwog::squeeze(polliwog::format::zstd, polliwog::zlib_level{6},
                                 std::span<const byte>{src},
                                 std::span<byte>{compressed});
     REQUIRE(sr.has_value());
@@ -62,9 +60,8 @@ TEST_CASE("zstd round-trip across levels") {
 
 TEST_CASE("zstd determinism: same input, same output") {
   auto const src = make_pattern(1024);
-  std::size_t cap =
-      polliwog::bound(polliwog::format::zstd, polliwog::zlib_level{6},
-                      src.size());
+  std::size_t cap = polliwog::bound(polliwog::format::zstd,
+                                    polliwog::zlib_level{6}, src.size());
 
   std::vector<byte> a(cap), b(cap);
 
@@ -82,24 +79,22 @@ TEST_CASE("zstd determinism: same input, same output") {
 
 TEST_CASE("zstd buffer_too_small fires before writing") {
   auto const src = make_pattern(4096);
-  std::size_t cap =
-      polliwog::bound(polliwog::format::zstd, polliwog::zlib_level{6},
-                      src.size());
+  std::size_t cap = polliwog::bound(polliwog::format::zstd,
+                                    polliwog::zlib_level{6}, src.size());
 
   std::vector<byte> tiny(cap - 1);
   auto r = polliwog::squeeze(polliwog::format::zstd, polliwog::zlib_level{6},
-                             std::span<const byte>{src},
-                             std::span<byte>{tiny});
+                             std::span<const byte>{src}, std::span<byte>{tiny});
   REQUIRE_FALSE(r.has_value());
   REQUIRE(r.error().k == polliwog::kind::buffer_too_small);
 }
 
-TEST_CASE("zstd compressed output is smaller than input for compressible data") {
+TEST_CASE(
+    "zstd compressed output is smaller than input for compressible data") {
   // long runs of zeros are highly compressible
   auto const src = make_pattern(65536);
-  std::size_t cap =
-      polliwog::bound(polliwog::format::zstd, polliwog::zlib_level{6},
-                      src.size());
+  std::size_t cap = polliwog::bound(polliwog::format::zstd,
+                                    polliwog::zlib_level{6}, src.size());
   std::vector<byte> compressed(cap);
   auto sr = polliwog::squeeze(polliwog::format::zstd, polliwog::zlib_level{6},
                               std::span<const byte>{src},

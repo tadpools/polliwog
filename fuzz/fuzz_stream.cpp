@@ -13,8 +13,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   if (size == 0)
     return 0;
 
-  std::span<const std::byte> in{
-      reinterpret_cast<const std::byte *>(data), size};
+  std::span<const std::byte> in{reinterpret_cast<const std::byte *>(data),
+                                size};
 
   // output buffer: generous to avoid buffer_too_small dominating
   std::byte out[65536]{};
@@ -30,9 +30,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     if (chunk > size - pos)
       chunk = size - pos;
 
-    auto r = comp.push(
-        std::span<const std::byte>{in.data() + pos, chunk},
-        std::span<std::byte>{out});
+    auto r = comp.push(std::span<const std::byte>{in.data() + pos, chunk},
+                       std::span<std::byte>{out});
     if (!r)
       return 0;
     pos += r->bytes_in;
@@ -44,9 +43,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     return 0;
 
   // now decompress what we just compressed
-  std::span<const std::byte> compressed{out,
-                                         static_cast<std::size_t>(
-                                             fr->bytes_out)};
+  std::span<const std::byte> compressed{
+      out, static_cast<std::size_t>(fr->bytes_out)};
   std::byte decompressed[65536]{};
 
   polliwog::decompressor dec(polliwog::format::zlib);
@@ -56,9 +54,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
     if (chunk > compressed.size() - cpos)
       chunk = compressed.size() - cpos;
 
-    auto r = dec.push(
-        std::span<const std::byte>{compressed.data() + cpos, chunk},
-        std::span<std::byte>{decompressed});
+    auto r =
+        dec.push(std::span<const std::byte>{compressed.data() + cpos, chunk},
+                 std::span<std::byte>{decompressed});
     if (!r)
       return 0;
     if (r->done)

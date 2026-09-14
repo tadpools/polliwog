@@ -15,8 +15,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
   if (size == 0)
     return 0;
 
-  std::span<const std::byte> in{
-      reinterpret_cast<const std::byte *>(data), size};
+  std::span<const std::byte> in{reinterpret_cast<const std::byte *>(data),
+                                size};
 
   // a reasonable output bound; if the fuzzer finds buffer_too_small
   // that is fine - we just do not want to crash on allocation

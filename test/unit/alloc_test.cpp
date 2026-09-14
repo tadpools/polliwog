@@ -84,10 +84,9 @@ TEST_CASE("squeeze over spans: zero net heap allocations") {
 
   // snapshot after test setup: vectors are on the heap but stable
   auto cp = take_snapshot();
-  auto r = polliwog::squeeze(polliwog::format::zlib,
-                             polliwog::zlib_level::default_level,
-                             std::span<const byte>{src},
-                             std::span<byte>{compressed});
+  auto r = polliwog::squeeze(
+      polliwog::format::zlib, polliwog::zlib_level::default_level,
+      std::span<const byte>{src}, std::span<byte>{compressed});
   auto const delta = heap_delta(cp);
 
   REQUIRE(r.has_value());
@@ -100,10 +99,9 @@ TEST_CASE("swell over spans: zero net heap allocations") {
   std::size_t cap = polliwog::bound(
       polliwog::format::zlib, polliwog::zlib_level::default_level, src.size());
   std::vector<byte> compressed(cap);
-  auto sr = polliwog::squeeze(polliwog::format::zlib,
-                              polliwog::zlib_level::default_level,
-                              std::span<const byte>{src},
-                              std::span<byte>{compressed});
+  auto sr = polliwog::squeeze(
+      polliwog::format::zlib, polliwog::zlib_level::default_level,
+      std::span<const byte>{src}, std::span<byte>{compressed});
   REQUIRE(sr.has_value());
 
   std::vector<byte> decompressed(src.size());
@@ -118,7 +116,8 @@ TEST_CASE("swell over spans: zero net heap allocations") {
   REQUIRE(delta == 0);
 }
 
-TEST_CASE("compressor lifetime: zero net heap after construction and destruction") {
+TEST_CASE(
+    "compressor lifetime: zero net heap after construction and destruction") {
   // the compressor constructor allocates the pimpl (unique_ptr<impl>)
   // and the z_stream inside it. the destructor frees both. the net
   // heap delta from before construction to after destruction must be
@@ -142,10 +141,9 @@ TEST_CASE("squeeze + swell round-trip: zero net heap allocations") {
   std::vector<byte> decompressed(src.size());
 
   auto cp = take_snapshot();
-  auto sr = polliwog::squeeze(polliwog::format::zlib,
-                              polliwog::zlib_level::default_level,
-                              std::span<const byte>{src},
-                              std::span<byte>{compressed});
+  auto sr = polliwog::squeeze(
+      polliwog::format::zlib, polliwog::zlib_level::default_level,
+      std::span<const byte>{src}, std::span<byte>{compressed});
   auto dr = polliwog::swell(
       polliwog::format::zlib,
       std::span<const byte>{compressed.data(), sr->bytes_written},

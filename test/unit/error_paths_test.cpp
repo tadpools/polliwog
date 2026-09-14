@@ -76,10 +76,9 @@ TEST_CASE("format_mismatch: swell zlib bytes through zstd format") {
   std::size_t cap = polliwog::bound(
       polliwog::format::zlib, polliwog::zlib_level::default_level, src.size());
   std::vector<byte> compressed(cap);
-  auto sr = polliwog::squeeze(polliwog::format::zlib,
-                              polliwog::zlib_level::default_level,
-                              std::span<const byte>{src},
-                              std::span<byte>{compressed});
+  auto sr = polliwog::squeeze(
+      polliwog::format::zlib, polliwog::zlib_level::default_level,
+      std::span<const byte>{src}, std::span<byte>{compressed});
   REQUIRE(sr.has_value());
 
   std::vector<byte> decompressed(src.size());

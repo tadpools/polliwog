@@ -82,35 +82,28 @@ std::vector<byte> random_data(std::size_t n) {
 
 static void BM_squeeze_zlib_default(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::zlib,
-                               polliwog::zlib_level::default_level,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r = polliwog::squeeze(
+        polliwog::format::zlib, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_squeeze_zlib_default)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_squeeze_zlib_default)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 static void BM_swell_zlib_default(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> compressed(cap);
-  auto sr = polliwog::squeeze(polliwog::format::zlib,
-                              polliwog::zlib_level::default_level,
-                              std::span<const byte>{data},
-                              std::span<byte>{compressed});
+  auto sr = polliwog::squeeze(
+      polliwog::format::zlib, polliwog::zlib_level::default_level,
+      std::span<const byte>{data}, std::span<byte>{compressed});
   benchmark::DoNotOptimize(sr);
 
   std::vector<byte> decompressed(data.size());
@@ -123,31 +116,23 @@ static void BM_swell_zlib_default(benchmark::State &state) {
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_swell_zlib_default)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_swell_zlib_default)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 static void BM_squeeze_gzip_default(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
-  std::size_t cap = polliwog::bound(polliwog::format::gzip,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::gzip, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::gzip,
-                               polliwog::zlib_level::default_level,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r = polliwog::squeeze(
+        polliwog::format::gzip, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_squeeze_gzip_default)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_squeeze_gzip_default)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 static void BM_squeeze_zlib_best(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
@@ -156,18 +141,14 @@ static void BM_squeeze_zlib_best(benchmark::State &state) {
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::zlib,
-                               polliwog::zlib_level::best,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r =
+        polliwog::squeeze(polliwog::format::zlib, polliwog::zlib_level::best,
+                          std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_squeeze_zlib_best)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_squeeze_zlib_best)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 static void BM_squeeze_zlib_fastest(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
@@ -176,48 +157,38 @@ static void BM_squeeze_zlib_fastest(benchmark::State &state) {
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::zlib,
-                               polliwog::zlib_level::fastest,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r =
+        polliwog::squeeze(polliwog::format::zlib, polliwog::zlib_level::fastest,
+                          std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_squeeze_zlib_fastest)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_squeeze_zlib_fastest)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 // incompressible data: the ratio should approach 1.0 (plus header overhead)
 static void BM_squeeze_zlib_random(benchmark::State &state) {
   auto const data = random_data(static_cast<std::size_t>(state.range(0)));
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::zlib,
-                               polliwog::zlib_level::default_level,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r = polliwog::squeeze(
+        polliwog::format::zlib, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_squeeze_zlib_random)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_squeeze_zlib_random)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 // -- streaming benchmarks -------------------------------------------------
 
 static void BM_streaming_zlib(benchmark::State &state) {
   auto const data = synthetic(static_cast<std::size_t>(state.range(0)));
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> compressed(cap);
   std::vector<byte> decompressed(data.size());
 
@@ -235,8 +206,8 @@ static void BM_streaming_zlib(benchmark::State &state) {
       benchmark::DoNotOptimize(r);
       c_off += r->bytes_produced;
     }
-    auto fin = c.finish(std::span<byte>{compressed.data() + c_off,
-                                        compressed.size() - c_off});
+    auto fin = c.finish(
+        std::span<byte>{compressed.data() + c_off, compressed.size() - c_off});
     benchmark::DoNotOptimize(fin);
     c_off += fin->bytes_produced;
 
@@ -246,10 +217,9 @@ static void BM_streaming_zlib(benchmark::State &state) {
     std::size_t co = 0;
     while (co < c_off) {
       auto n = std::min(chunk, c_off - co);
-      auto r = d.push(
-          std::span<const byte>{compressed.data() + co, n},
-          std::span<byte>{decompressed.data() + d_off,
-                          decompressed.size() - d_off});
+      auto r = d.push(std::span<const byte>{compressed.data() + co, n},
+                      std::span<byte>{decompressed.data() + d_off,
+                                      decompressed.size() - d_off});
       benchmark::DoNotOptimize(r);
       d_off += r->bytes_produced;
       co += r->bytes_consumed;
@@ -259,10 +229,7 @@ static void BM_streaming_zlib(benchmark::State &state) {
   }
   state.SetBytesProcessed(state.iterations() * data.size());
 }
-BENCHMARK(BM_streaming_zlib)
-    ->Arg(1024)
-    ->Arg(65536)
-    ->Arg(1024 * 1024);
+BENCHMARK(BM_streaming_zlib)->Arg(1024)->Arg(65536)->Arg(1024 * 1024);
 
 // -- corpus benchmarks (run only when the pond corpus is present) ---------
 
@@ -274,16 +241,14 @@ static void BM_corpus_squeeze_zlib(benchmark::State &state) {
 
   auto name = std::string{"dickens"};
   auto data = load_file(corpus_dir() / name);
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::zlib,
-                               polliwog::zlib_level::default_level,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r = polliwog::squeeze(
+        polliwog::format::zlib, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
@@ -297,16 +262,14 @@ static void BM_corpus_squeeze_gzip(benchmark::State &state) {
   }
 
   auto data = load_file(corpus_dir() / "dickens");
-  std::size_t cap = polliwog::bound(polliwog::format::gzip,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::gzip, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> out(cap);
 
   for (auto _ : state) {
-    auto r = polliwog::squeeze(polliwog::format::gzip,
-                               polliwog::zlib_level::default_level,
-                               std::span<const byte>{data},
-                               std::span<byte>{out});
+    auto r = polliwog::squeeze(
+        polliwog::format::gzip, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{out});
     benchmark::DoNotOptimize(r);
   }
   state.SetBytesProcessed(state.iterations() * data.size());
@@ -320,17 +283,15 @@ static void BM_corpus_roundtrip_zlib(benchmark::State &state) {
   }
 
   auto data = load_file(corpus_dir() / "dickens");
-  std::size_t cap = polliwog::bound(polliwog::format::zlib,
-                                    polliwog::zlib_level::default_level,
-                                    data.size());
+  std::size_t cap = polliwog::bound(
+      polliwog::format::zlib, polliwog::zlib_level::default_level, data.size());
   std::vector<byte> compressed(cap);
   std::vector<byte> decompressed(data.size());
 
   for (auto _ : state) {
-    auto sr = polliwog::squeeze(polliwog::format::zlib,
-                                polliwog::zlib_level::default_level,
-                                std::span<const byte>{data},
-                                std::span<byte>{compressed});
+    auto sr = polliwog::squeeze(
+        polliwog::format::zlib, polliwog::zlib_level::default_level,
+        std::span<const byte>{data}, std::span<byte>{compressed});
     benchmark::DoNotOptimize(sr);
     auto dr = polliwog::swell(
         polliwog::format::zlib,

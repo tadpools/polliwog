@@ -201,8 +201,7 @@ TEST_CASE("zstd streaming round-trip in chunks") {
   auto const src = make_seq(8192);
   constexpr std::size_t chunk = 1024;
 
-  polliwog::compressor c(polliwog::format::zstd,
-                         polliwog::zlib_level{6});
+  polliwog::compressor c(polliwog::format::zstd, polliwog::zlib_level{6});
 
   std::vector<byte> compressed;
   compressed.reserve(src.size());
@@ -251,8 +250,7 @@ TEST_CASE("zstd streaming round-trip in chunks") {
 TEST_CASE("zstd streaming compressor then one-shot swell") {
   auto const src = make_seq(4096);
 
-  polliwog::compressor c(polliwog::format::zstd,
-                         polliwog::zlib_level{6});
+  polliwog::compressor c(polliwog::format::zstd, polliwog::zlib_level{6});
 
   std::array<byte, 8192> cbuf{};
   auto r = c.push(std::span<const byte>{src}, std::span<byte>{cbuf});
@@ -264,10 +262,10 @@ TEST_CASE("zstd streaming compressor then one-shot swell") {
 
   // swell the streamed output with one-shot
   std::vector<byte> decompressed(src.size());
-  auto sr = polliwog::swell(
-      polliwog::format::zstd,
-      std::span<const byte>{cbuf.data(), fin->bytes_produced},
-      std::span<byte>{decompressed});
+  auto sr =
+      polliwog::swell(polliwog::format::zstd,
+                      std::span<const byte>{cbuf.data(), fin->bytes_produced},
+                      std::span<byte>{decompressed});
   REQUIRE(sr.has_value());
   REQUIRE(sr->bytes_written == src.size());
   REQUIRE(std::equal(src.begin(), src.end(), decompressed.begin()));
@@ -302,10 +300,10 @@ TEST_CASE("zstd streaming round-trip across levels") {
     REQUIRE(fin->done);
 
     std::vector<byte> decompressed(src.size());
-    auto sr = polliwog::swell(
-        polliwog::format::zstd,
-        std::span<const byte>{cbuf.data(), fin->bytes_produced},
-        std::span<byte>{decompressed});
+    auto sr =
+        polliwog::swell(polliwog::format::zstd,
+                        std::span<const byte>{cbuf.data(), fin->bytes_produced},
+                        std::span<byte>{decompressed});
     REQUIRE(sr.has_value());
     REQUIRE(sr->bytes_written == src.size());
     REQUIRE(std::equal(src.begin(), src.end(), decompressed.begin()));

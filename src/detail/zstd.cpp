@@ -22,8 +22,7 @@ zstd_squeezer::zstd_squeezer(format f, zstd_level lvl)
   // set the compression level via the advanced API. level 0 means
   // "use default" (ZSTD_CLEVEL_DEFAULT=3). this parameter is sticky
   // for streaming via ZSTD_compressStream2.
-  auto ret =
-      ZSTD_CCtx_setParameter(ctx_, ZSTD_c_compressionLevel, level_);
+  auto ret = ZSTD_CCtx_setParameter(ctx_, ZSTD_c_compressionLevel, level_);
   assert(!ZSTD_isError(ret));
   (void)ret;
 }
@@ -56,8 +55,8 @@ result zstd_squeezer::push(std::span<const std::byte> in,
   // complete frame (header + content + epilogue) in one call. the
   // level is passed directly here rather than through the CCtx, since
   // ZSTD_compress does not use the CCtx's parameters.
-  auto ret = ZSTD_compress(out.data(), out.size(), in.data(), in.size(),
-                           level_);
+  auto ret =
+      ZSTD_compress(out.data(), out.size(), in.data(), in.size(), level_);
 
   if (ZSTD_isError(ret)) {
     return std::unexpected(error{kind::backend_failure, backend_id::zstd, 0,
@@ -150,8 +149,7 @@ zstd_sweller::~zstd_sweller() {
 result zstd_sweller::push(std::span<const std::byte> in,
                           std::span<std::byte> out) {
   // one-shot decompress
-  auto ret =
-      ZSTD_decompress(out.data(), out.size(), in.data(), in.size());
+  auto ret = ZSTD_decompress(out.data(), out.size(), in.data(), in.size());
 
   if (ZSTD_isError(ret)) {
     return std::unexpected(error{kind::stream_corrupt, backend_id::zstd, 0,
@@ -203,7 +201,7 @@ zstd_sweller zstd_backend::make_sweller(format f) { return zstd_sweller{f}; }
 std::size_t zstd_backend::bound(level, std::uint64_t in_size) {
   size_t r = ZSTD_compressBound(in_size);
   return ZSTD_isError(r) ? std::numeric_limits<std::size_t>::max()
-                          : static_cast<std::size_t>(r);
+                         : static_cast<std::size_t>(r);
 }
 
 result zstd_backend::push(handle &h, std::span<const std::byte> in,
