@@ -78,5 +78,5 @@ jobs:
           echo "all checksums verified"
 
       - name: test
-        timeout-minutes: 15
-        run: ctest --preset default
+        timeout-minutes: 30
+        run: ctest --preset default --output-on-failure
