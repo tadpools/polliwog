@@ -8,7 +8,33 @@ stages: 2026.1.0, 2026.2.0, 2026.3.0, 2026.4.0, 2027.1.0.
 every entry is checkable against the tag it ships in. nothing is
 described here before it has a test.
 
-## unreleased - 2026.2.0
+## unreleased - 2026.3.0
+
+tadpole: zstd backend, error taxonomy freeze, fuzzing, brood design
+note.
+
+### added
+
+- zstd backend (POLLIWOG_WITH_ZSTD, opt-in): raii handles over
+  ZSTD_CCtx/ZSTD_DCtx, stable api only (zstd 1.5.7). zstd_level
+  enum (fastest=1, default_level=3, best=19). one-shot squeeze/swell
+  and streaming push/pull/finish. round-trip and determinism tests.
+- cmake multi-backend build: zstd fetched via FetchContent with
+  SOURCE_SUBDIR build/cmake. POLLIWOG_HAS_ZLIB / POLLIWOG_HAS_ZSTD
+  as PUBLIC compile definitions. stub types for missing backends.
+- error taxonomy frozen (D16): kinds are additive from here on.
+  header doc updated; five of seven kinds have real test paths;
+  out_of_memory and internal_contract_violation are untestable by
+  design.
+- fuzz targets (POLLIWOG_FUZZ, clang required): one-shot round-trip
+  and streaming push/pull fuzz targets with libfuzzer. fuzz ci
+  workflow: smoke 60s on pr, deep 5min weekly.
+- brood design note (Experimental): parallel batch engine header,
+  design only, no implementation. adoption step named (froglet).
+- verified: zlib-only, both backends, zstd-only configs all pass the
+  full suite.
+
+## 2026.2.0 - 2026-09-12
 
 zlib only, honestly labeled: one-shot and streaming
 squeeze/swell over zlib, gzip, and raw_deflate; the determinism
@@ -24,13 +50,23 @@ benchmarks on the silesia corpus.
 - one-shot squeeze(format, level, in, out) and swell(format, in,
   out): compress and decompress in a single call, pure functions,
   no hidden state. bound() via compressBound, honest for all three
-  containers.
+  containers. level_unsupported rejected before touching the backend.
 - round-trip property tests across formats and levels; determinism
-  check; buffer_too_small and format_mismatch error paths.
+  check; buffer_too_small, format_mismatch, level_unsupported, and
+  backend_failure error paths all reachable by tests.
 - streaming compressor and decompressor: push, flush (sync only,
   per D9), finish on the compressor; push on the decompressor.
   move-only, pimpl to keep internal headers out of the public
   surface. streaming round-trip and flush tests.
+- allocator-counting tests enforcing the memory table: squeeze/swell
+  over spans produce zero net heap allocations; compressor
+  construction and destruction are balanced.
+- google benchmark targets (POLLIWOG_BENCH=OFF by default):
+  synthetic data at 1 KB, 64 KB, and 1 MB across zlib levels and
+  formats; streaming round-trip; corpus benchmarks over the silesia
+  pond when present.
+- bench ci workflow: nightly and on release, three runners,
+  benchmark results uploaded as artifacts with 90-day retention.
 
 ## 2026.1.0 - 2026-09-12
 

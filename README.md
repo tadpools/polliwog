@@ -36,6 +36,8 @@ the point.
 | backend contract (detail)       | internal      | in 2026.1.0, tested |
 | one-shot squeeze/swell (zlib)   | Growing       | in 2026.2.0, tested |
 | streaming push/pull/finish      | Growing       | in 2026.2.0, tested |
+| allocator-counting tests        | internal      | in 2026.2.0, tested |
+| google benchmark targets        | internal      | in 2026.2.0, tested |
 | zstd backend                    | not yet       | 2026.3.0  |
 | brood: parallel batch engine    | not yet       | 2026.4.0  |
 | mmap-backed file helpers        | not yet       | 2026.4.0  |
@@ -91,5 +93,6 @@ license file before packaging.
 
 ## status
 
-2026.1.0 released, 2026.2.0 in progress. the contracts are in and
-tested; one-shot and streaming compress/decompress work over zlib.
+2026.1.0 released, 2026.2.0 ready for gate. the contracts are in and
+tested; one-shot and streaming compress/decompress work over zlib;
+every error kind is reachable; benchmarks are tracked.
