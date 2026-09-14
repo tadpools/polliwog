@@ -47,33 +47,36 @@ jobs:
         run: |
           set -e
           dir="test/pond/corpus/large"
-          declare -A md5s=(
-            [dickens]=88334708559f6db57d79096bc0aca07e
-            [mozilla]=c7789a2097f1ff944b0c737430a339b3
-            [mr]=38e623e3093b7bf2003ca4b1bbc19927
-            [nci]=31f85bc8706f3c921104e7c169e2e2e1
-            [ooffice]=573c4ae915e36631d8f2dcffb9b9b66d
-            [osdb]=e734b0c48e6a982adfb5802da3032ecd
-            [reymont]=d8f54d78105079775f32d76dc55fc671
-            [samba]=154eaea7ea70e89f6339ff0abf4112ca
-            [sao]=79e95a22e18cd82b7e42bf91b380d30b
-            [webster]=474931ad907ac27bf962c75ded46c069
-            [xml]=9b09c0c80104adb8aae910b7d7db003e
-            [x-ray]=9baec32ad14ec3eff487d254382cb91c
-          )
           ok=true
-          for f in "${!md5s[@]}"; do
-            filepath="$dir/$f"
-            actual=$(python3 -c "import hashlib,sys; print(hashlib.md5(open(sys.argv[1],'rb').read()).hexdigest())" "$filepath")
-            expected="${md5s[$f]}"
-            echo "$f expected=$expected actual=$actual"
+          check() {
+            local file="$1" expected="$2"
+            local actual
+            if command -v md5sum >/dev/null 2>&1; then
+              actual=$(md5sum "$dir/$file" | cut -d' ' -f1)
+            else
+              actual=$(md5 -q "$dir/$file")
+            fi
+            echo "$file expected=$expected actual=$actual"
             if [ "$actual" != "$expected" ]; then
-              echo "MISMATCH: $f"
+              echo "MISMATCH: $file"
               ok=false
             fi
-          done
+          }
+          check dickens 88334708559f6db57d79096bc0aca07e
+          check mozilla c7789a2097f1ff944b0c737430a339b3
+          check mr 38e623e3093b7bf2003ca4b1bbc19927
+          check nci 31f85bc8706f3c921104e7c169e2e2e1
+          check ooffice 573c4ae915e36631d8f2dcffb9b9b66d
+          check osdb e734b0c48e6a982adfb5802da3032ecd
+          check reymont d8f54d78105079775f32d76dc55fc671
+          check samba 154eaea7ea70e89f6339ff0abf4112ca
+          check sao 79e95a22e18cd82b7e42bf91b380d30b
+          check webster 474931ad907ac27bf962c75ded46c069
+          check xml 9b09c0c80104adb8aae910b7d7db003e
+          check x-ray 9baec32ad14ec3eff487d254382cb91c
           if [ "$ok" = false ]; then exit 1; fi
           echo "all checksums verified"
 
       - name: test
+        timeout-minutes: 15
         run: ctest --preset default

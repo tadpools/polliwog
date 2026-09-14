@@ -56,10 +56,13 @@ struct zstd_stub_sweller {
 };
 #endif
 
-// helper: build a format_mismatch error
+// helper: build a format_mismatch error (only used by stub paths when a
+// backend is compiled out)
+#if !defined(POLLIWOG_HAS_ZLIB) || !defined(POLLIWOG_HAS_ZSTD)
 inline error format_mismatch_err() {
   return error{kind::format_mismatch, backend_id::none, 0, ""};
 }
+#endif
 
 // visit helpers: each visitor returns the same type
 // (std::expected<detail::result, error>) using a common return wrapper. we
