@@ -51,6 +51,20 @@ enum class zlib_level : int {
   best = 9,          // Z_BEST_COMPRESSION
 };
 
+// zstd's compression levels. ZSTD_minCLevel() returns the most
+// negative level (speed-oriented); ZSTD_maxCLevel() returns the
+// highest (ratio-oriented). the default is 3. negative levels
+// extend the speed/ratio range below the default.
+//
+// the named anchors are the blessed surface. other levels are
+// reachable by explicit init, zstd_level{12}; a value outside the
+// backend's range fails with level_unsupported.
+enum class zstd_level : int {
+  fastest = 1,        // speed-oriented
+  default_level = 3,  // ZSTD_CLEVEL_DEFAULT
+  best = 19,          // high ratio, not ultra (ultra starts at 20)
+};
+
 inline std::string_view format_name(format f) {
   switch (f) {
   case format::zlib:

@@ -22,9 +22,16 @@ if(POLLIWOG_WITH_ZLIB)
     unit/zlib_test.cpp
     unit/gzip_fixtures.cpp
     unit/stream_test.cpp
+    unit/error_paths_test.cpp
+    unit/alloc_test.cpp
     unit/pond_test.cpp)
   target_compile_definitions(polliwog-tests PRIVATE
     TEST_POND_CORPUS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/pond/corpus/large")
+endif()
+
+if(POLLIWOG_WITH_ZSTD)
+  target_sources(polliwog-tests PRIVATE
+    unit/zstd_test.cpp)
 endif()
 
 add_test(NAME smoke COMMAND polliwog-tests)
