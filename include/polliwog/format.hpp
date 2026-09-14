@@ -60,9 +60,9 @@ enum class zlib_level : int {
 // reachable by explicit init, zstd_level{12}; a value outside the
 // backend's range fails with level_unsupported.
 enum class zstd_level : int {
-  fastest = 1,        // speed-oriented
-  default_level = 3,  // ZSTD_CLEVEL_DEFAULT
-  best = 19,          // high ratio, not ultra (ultra starts at 20)
+  fastest = 1,       // speed-oriented
+  default_level = 3, // ZSTD_CLEVEL_DEFAULT
+  best = 19,         // high ratio, not ultra (ultra starts at 20)
 };
 
 inline std::string_view format_name(format f) {

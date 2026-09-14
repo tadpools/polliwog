@@ -61,9 +61,9 @@ inline error format_mismatch_err() {
   return error{kind::format_mismatch, backend_id::none, 0, ""};
 }
 
-// visit helpers: each visitor returns the same type (std::expected<detail::result, error>)
-// using a common return wrapper. we define a simple struct to hold
-// push/flush/finish results.
+// visit helpers: each visitor returns the same type
+// (std::expected<detail::result, error>) using a common return wrapper. we
+// define a simple struct to hold push/flush/finish results.
 struct push_out {
   std::size_t bytes_in{};
   std::size_t bytes_out{};
@@ -189,31 +189,29 @@ struct finish_visitor {
 };
 
 // variant aliases
-using squeezer_variant =
-    std::variant<
+using squeezer_variant = std::variant<
 #ifdef POLLIWOG_HAS_ZLIB
-      detail::zlib_squeezer,
+    detail::zlib_squeezer,
 #else
-      zlib_stub_squeezer,
+    zlib_stub_squeezer,
 #endif
 #ifdef POLLIWOG_HAS_ZSTD
-      detail::zstd_squeezer
+    detail::zstd_squeezer
 #else
-      zstd_stub_squeezer
+    zstd_stub_squeezer
 #endif
     >;
 
-using sweller_variant =
-    std::variant<
+using sweller_variant = std::variant<
 #ifdef POLLIWOG_HAS_ZLIB
-      detail::zlib_sweller,
+    detail::zlib_sweller,
 #else
-      zlib_stub_sweller,
+    zlib_stub_sweller,
 #endif
 #ifdef POLLIWOG_HAS_ZSTD
-      detail::zstd_sweller
+    detail::zstd_sweller
 #else
-      zstd_stub_sweller
+    zstd_stub_sweller
 #endif
     >;
 
@@ -229,7 +227,8 @@ squeezer_variant make_squeezer(format f, zlib_level lvl) {
 #endif
   case format::zstd:
 #ifdef POLLIWOG_HAS_ZSTD
-    return detail::zstd_squeezer{f, static_cast<zstd_level>(static_cast<int>(lvl))};
+    return detail::zstd_squeezer{
+        f, static_cast<zstd_level>(static_cast<int>(lvl))};
 #else
     return zstd_stub_squeezer{f, static_cast<int>(lvl)};
 #endif
