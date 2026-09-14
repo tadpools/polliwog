@@ -1,0 +1,106 @@
+name: fuzz
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 3 * * 1'  # monday 03:00 utc, deep fuzz
+  workflow_dispatch:
+
+jobs:
+  fuzz:
+    name: ${{ matrix.target }} / ${{ github.event_name == 'schedule' && 'deep' || 'smoke' }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [fuzz_squeeze, fuzz_stream]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install clang
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - name: configure
+        run: >
+          cmake --preset default
+          -DPOLLIWOG_WITH_ZLIB=ON
+          -DPOLLIWOG_WITH_ZSTD=ON
+          -DCMAKE_C_COMPILER=clang
+          -DCMAKE_CXX_COMPILER=clang++
+          -DPOLLIWOG_FUZZ=ON
+
+      - name: build
+        run: cmake --build --preset default
+
+      - name: download pond corpus
+        run: |
+          set -e
+          dir="test/pond/corpus/large"
+          mkdir -p "$dir"
+          url="https://raw.githubusercontent.com/MiloszKrajewski/SilesiaCorpus/master"
+          files="dickens mozilla mr nci ooffice osdb reymont samba sao webster xml x-ray"
+          for f in $files; do
+            if [ ! -f "$dir/$f" ]; then
+              echo "downloading $f"
+              curl -sS -o "$dir/$f.zip" "$url/$f.zip"
+              unzip -o -d "$dir" "$dir/$f.zip"
+              rm "$dir/$f.zip"
+            fi
+          done
+
+      - name: seed corpus
+        run: |
+          set -e
+          corpus="corpus/${{ matrix.target }}"
+          mkdir -p "$corpus"
+          # seed with pond files (first 4096 bytes of each)
+          for f in test/pond/corpus/large/*; do
+            [ -f "$f" ] || continue
+            name=$(basename "$f")
+            head -c 4096 "$f" > "$corpus/$name"
+          done
+
+      - name: smoke fuzz (${{ github.event_name == 'schedule' && 'skipped' || '60s' }})
+        if: github.event_name != 'schedule'
+        run: |
+          set -e
+          timeout 60 ./build/default/${{ matrix.target }} \
+            corpus/${{ matrix.target }} || code=$?
+          # exit 0 (clean) or timeout exit code are both acceptable
+          # a real crash will give a non-timeout non-zero exit
+          if [ "${code:-0}" = "124" ]; then
+            echo "smoke fuzz: timeout reached (clean)"
+          elif [ "${code:-0}" = "0" ]; then
+            echo "smoke fuzz: completed cleanly"
+          else
+            echo "smoke fuzz: exit code $code"
+            exit "$code"
+          fi
+
+      - name: deep fuzz (5 min)
+        if: github.event_name == 'schedule'
+        run: |
+          set -e
+          corpus="corpus/${{ matrix.target }}"
+          timeout 300 ./build/default/${{ matrix.target }} \
+            corpus/${{ matrix.target }} \
+            -max_len=4096 \
+            -dict=test/pond/corpus/large/dickens || code=$?
+          if [ "${code:-0}" = "124" ]; then
+            echo "deep fuzz: timeout reached (clean)"
+          elif [ "${code:-0}" = "0" ]; then
+            echo "deep fuzz: completed cleanly"
+          else
+            echo "deep fuzz: exit code $code"
+            exit "$code"
+          fi
+
+      - name: upload corpus
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-corpus-${{ matrix.target }}
+          path: corpus/${{ matrix.target }}
+          retention-days: 30
