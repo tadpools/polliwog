@@ -2,6 +2,11 @@
 // nothing in the public api throws.
 // Stability: Stable .
 //
+// taxonomy frozen as of 2026.3.0 (tadpole). new kinds are additive
+// only; removing or renaming a kind is a milestone event, never a
+// patch. the list below is exhaustive and the switch in kind_name
+// enforces it at compile time.
+//
 // every fallible call in polliwog returns std::expected<T, error>.
 // callers switch on kind, never parse strings; the note carries the
 // backend's message verbatim when one is forwarded, and lowercase
