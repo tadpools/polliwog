@@ -192,3 +192,124 @@ TEST_CASE("streaming decompressor stream_corrupt on garbage") {
   REQUIRE_FALSE(r.has_value());
   REQUIRE(r.error().k == polliwog::kind::stream_corrupt);
 }
+
+// -- zstd streaming tests (require POLLIWOG_HAS_ZSTD) --------------------
+
+#ifdef POLLIWOG_HAS_ZSTD
+
+TEST_CASE("zstd streaming round-trip in chunks") {
+  auto const src = make_seq(8192);
+  constexpr std::size_t chunk = 1024;
+
+  polliwog::compressor c(polliwog::format::zstd,
+                         polliwog::zlib_level{6});
+
+  std::vector<byte> compressed;
+  compressed.reserve(src.size());
+
+  std::array<byte, chunk * 2> cbuf{};
+  for (std::size_t off = 0; off < src.size(); off += chunk) {
+    auto n = std::min(chunk, src.size() - off);
+    auto r = c.push(std::span<const byte>{src.data() + off, n},
+                    std::span<byte>{cbuf});
+    REQUIRE(r.has_value());
+    compressed.insert(compressed.end(), cbuf.begin(),
+                      cbuf.begin() +
+                          static_cast<std::ptrdiff_t>(r->bytes_produced));
+  }
+
+  auto fin = c.finish(std::span<byte>{cbuf});
+  REQUIRE(fin.has_value());
+  REQUIRE(fin->done);
+  compressed.insert(compressed.end(), cbuf.begin(),
+                    cbuf.begin() +
+                        static_cast<std::ptrdiff_t>(fin->bytes_produced));
+
+  polliwog::decompressor d(polliwog::format::zstd);
+  std::vector<byte> decompressed;
+  decompressed.reserve(src.size());
+  std::array<byte, chunk * 2> dbuf{};
+
+  std::size_t coff = 0;
+  while (coff < compressed.size()) {
+    auto n = std::min(chunk, compressed.size() - coff);
+    auto r = d.push(std::span<const byte>{compressed.data() + coff, n},
+                    std::span<byte>{dbuf});
+    REQUIRE(r.has_value());
+    decompressed.insert(decompressed.end(), dbuf.begin(),
+                        dbuf.begin() +
+                            static_cast<std::ptrdiff_t>(r->bytes_produced));
+    coff += static_cast<std::size_t>(r->bytes_consumed);
+    if (r->done)
+      break;
+  }
+
+  REQUIRE(decompressed.size() == src.size());
+  REQUIRE(std::equal(src.begin(), src.end(), decompressed.begin()));
+}
+
+TEST_CASE("zstd streaming compressor then one-shot swell") {
+  auto const src = make_seq(4096);
+
+  polliwog::compressor c(polliwog::format::zstd,
+                         polliwog::zlib_level{6});
+
+  std::array<byte, 8192> cbuf{};
+  auto r = c.push(std::span<const byte>{src}, std::span<byte>{cbuf});
+  REQUIRE(r.has_value());
+
+  auto fin = c.finish(std::span<byte>{cbuf});
+  REQUIRE(fin.has_value());
+  REQUIRE(fin->done);
+
+  // swell the streamed output with one-shot
+  std::vector<byte> decompressed(src.size());
+  auto sr = polliwog::swell(
+      polliwog::format::zstd,
+      std::span<const byte>{cbuf.data(), fin->bytes_produced},
+      std::span<byte>{decompressed});
+  REQUIRE(sr.has_value());
+  REQUIRE(sr->bytes_written == src.size());
+  REQUIRE(std::equal(src.begin(), src.end(), decompressed.begin()));
+}
+
+TEST_CASE("zstd streaming decompressor stream_corrupt on garbage") {
+  std::array<byte, 32> garbage{};
+  for (std::size_t i = 0; i < garbage.size(); ++i)
+    garbage[i] = static_cast<byte>(0xdd);
+
+  std::array<byte, 256> out{};
+  polliwog::decompressor d(polliwog::format::zstd);
+  auto r = d.push(std::span<const byte>{garbage}, std::span<byte>{out});
+  REQUIRE_FALSE(r.has_value());
+  REQUIRE(r.error().k == polliwog::kind::stream_corrupt);
+}
+
+TEST_CASE("zstd streaming round-trip across levels") {
+  auto const src = make_seq(2048);
+
+  for (auto lvl : {polliwog::zlib_level{1}, polliwog::zlib_level{6},
+                   polliwog::zlib_level{9}}) {
+    INFO("level=" << static_cast<int>(lvl));
+
+    polliwog::compressor c(polliwog::format::zstd, lvl);
+    std::array<byte, 8192> cbuf{};
+
+    auto r = c.push(std::span<const byte>{src}, std::span<byte>{cbuf});
+    REQUIRE(r.has_value());
+    auto fin = c.finish(std::span<byte>{cbuf});
+    REQUIRE(fin.has_value());
+    REQUIRE(fin->done);
+
+    std::vector<byte> decompressed(src.size());
+    auto sr = polliwog::swell(
+        polliwog::format::zstd,
+        std::span<const byte>{cbuf.data(), fin->bytes_produced},
+        std::span<byte>{decompressed});
+    REQUIRE(sr.has_value());
+    REQUIRE(sr->bytes_written == src.size());
+    REQUIRE(std::equal(src.begin(), src.end(), decompressed.begin()));
+  }
+}
+
+#endif // POLLIWOG_HAS_ZSTD

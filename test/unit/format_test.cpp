@@ -42,3 +42,12 @@ TEST_CASE("the zlib level anchors hold their documented values") {
   STATIC_REQUIRE(int(polliwog::zlib_level::default_level) == 6);
   STATIC_REQUIRE(int(polliwog::zlib_level::best) == 9);
 }
+
+TEST_CASE("the zstd level anchors hold their documented values") {
+  // provenance: zstd 1.5.7's zstd.h - ZSTD_minCLevel() returns 1,
+  // ZSTD_CLEVEL_DEFAULT is 3, ZSTD_maxCLevel() returns 19 (or 22
+  // with advanced api, but we pin 19 as the safe stable ceiling).
+  STATIC_REQUIRE(int(polliwog::zstd_level::fastest) == 1);
+  STATIC_REQUIRE(int(polliwog::zstd_level::default_level) == 3);
+  STATIC_REQUIRE(int(polliwog::zstd_level::best) == 19);
+}
